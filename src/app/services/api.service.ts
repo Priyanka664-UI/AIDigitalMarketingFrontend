@@ -39,10 +39,11 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:9090/api';
+  private baseUrl = 'http://localhost:8082/api';
 
   constructor(private http: HttpClient) {}
 
+  // Business APIs
   createBusiness(business: Business): Observable<Business> {
     return this.http.post<Business>(`${this.baseUrl}/business`, business);
   }
@@ -55,6 +56,7 @@ export class ApiService {
     return this.http.get<Business>(`${this.baseUrl}/business/${id}`);
   }
 
+  // Campaign APIs
   createCampaign(data: any): Observable<Campaign> {
     return this.http.post<Campaign>(`${this.baseUrl}/campaigns`, data);
   }
@@ -73,5 +75,69 @@ export class ApiService {
 
   getCampaignAnalytics(campaignId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/campaigns/${campaignId}/analytics`);
+  }
+
+  // Dashboard APIs
+  getDashboardStats(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/dashboard/stats?businessId=${businessId}`);
+  }
+
+  getPlatformStatus(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/dashboard/platform-status?businessId=${businessId}`);
+  }
+
+  // Content APIs
+  getCalendar(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content/calendar?businessId=${businessId}`);
+  }
+
+  getLibrary(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content/library?businessId=${businessId}`);
+  }
+
+  getDrafts(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content/drafts?businessId=${businessId}`);
+  }
+
+  updateDraft(id: number, post: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/content/drafts/${id}`, post);
+  }
+
+  // AI APIs
+  generateAIContent(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/ai/generate-content`, data);
+  }
+
+  generateImage(prompt: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/ai/generate-image`, { prompt });
+  }
+
+  regenerateCaption(postId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/ai/regenerate-caption`, { postId });
+  }
+
+  getAIInsights(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/ai/insights?businessId=${businessId}`);
+  }
+
+  // Analytics APIs
+  getEngagementAnalytics(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/analytics/engagement?businessId=${businessId}`);
+  }
+
+  getPlatformComparison(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/analytics/platform-comparison?businessId=${businessId}`);
+  }
+
+  getCampaignPerformance(campaignId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/analytics/campaign-performance?campaignId=${campaignId}`);
+  }
+
+  getMonthlyReport(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/analytics/report/monthly?businessId=${businessId}`);
+  }
+
+  exportCSV(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/analytics/export/csv?businessId=${businessId}`);
   }
 }
