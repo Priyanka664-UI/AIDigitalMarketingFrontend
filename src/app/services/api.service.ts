@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Business {
   id?: number;
@@ -39,7 +40,7 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8082/api';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -189,5 +190,14 @@ export class ApiService {
 
   saveNotificationSettings(userId: number, settings: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/users/${userId}/notification-settings`, settings);
+  }
+
+  // Post APIs
+  deletePost(postId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/calendar/posts/${postId}`);
+  }
+
+  getPostsByPlatform(platform: string, businessId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.baseUrl}/calendar/posts/platform/${platform}?businessId=${businessId}`);
   }
 }

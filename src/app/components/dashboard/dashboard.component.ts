@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { ContentManagementService } from '../../services/content-management.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,12 @@ export class DashboardComponent implements OnInit {
   showSettingsMenu: boolean = false;
   settingsTab: string = 'account';
   private hideMenuTimeout: any;
+  
+  selectedPlatform: string = 'all';
+  platformPosts: { [key: string]: Post[] } = {};
+  showAllPostsModal: boolean = false;
+
+  toasts: Array<{message: string, type: string}> = [];
 
   loading = false;
   contentRequest = { productName: '', targetAudience: '', tone: 'PROFESSIONAL', goal: 'SALES', platform: 'INSTAGRAM' };
@@ -74,7 +81,8 @@ export class DashboardComponent implements OnInit {
     private apiService: ApiService,
     private authService: AuthService,
     private router: Router,
-    private contentService: ContentManagementService
+    private contentService: ContentManagementService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -89,7 +97,21 @@ export class DashboardComponent implements OnInit {
       this.loadAllRecentPosts(bId);
       this.loadAnalytics(bId);
       this.loadScheduledPosts();
+      
+      // Auto-refresh posts every 30 seconds to show status updates
+      setInterval(() => {
+        this.loadAllRecentPosts(bId);
+        this.loadDashboardStats(bId);
+      }, 30000);
     }
+
+    // Subscribe to toast notifications
+    this.toastService.toast$.subscribe(toast => {
+      this.toasts.push(toast);
+      setTimeout(() => {
+        this.toasts.shift();
+      }, 3000);
+    });
   }
 
   loadAnalytics(businessId: number) {
@@ -112,9 +134,21 @@ export class DashboardComponent implements OnInit {
     this.apiService.getCampaignsByBusiness(businessId).subscribe({
       next: (campaigns) => {
         if (campaigns && campaigns.length > 0) {
-          this.apiService.getCampaignPosts(campaigns[0].id!).subscribe({
-            next: (posts) => this.posts = posts,
-            error: (err) => console.error('Error loading posts:', err)
+          const allPosts: Post[] = [];
+          let loaded = 0;
+          campaigns.forEach(campaign => {
+            this.apiService.getCampaignPosts(campaign.id!).subscribe({
+              next: (posts) => {
+                allPosts.push(...posts);
+                loaded++;
+                if (loaded === campaigns.length) {
+                  this.posts = allPosts.sort((a, b) => 
+                    new Date(b.scheduledTime).getTime() - new Date(a.scheduledTime).getTime()
+                  );
+                }
+              },
+              error: (err) => console.error('Error loading posts:', err)
+            });
           });
         }
       }
@@ -200,7 +234,7 @@ export class DashboardComponent implements OnInit {
   generateAIContent() {
     const businessId = localStorage.getItem('businessId');
     if (!businessId || !this.selectedCampaign) {
-      alert('Please ensure you have a business and campaign selected.');
+      this.toastService.error('Please ensure you have a business and campaign selected.');
       return;
     }
 
@@ -209,36 +243,50 @@ export class DashboardComponent implements OnInit {
       ...this.aiContentConfig
     }).subscribe({
       next: (response: any) => {
-        alert(`${response.count || this.aiContentConfig.days} days of content generated successfully! ✨`);
+        this.toastService.success(`${response.count || this.aiContentConfig.days} days of content generated successfully! ✨`);
         if (response.posts) this.posts = response.posts;
         this.loadAllRecentPosts(+businessId);
         this.activeTab = 'dashboard';
       },
-      error: (err) => alert('Error: ' + (err.error?.error || 'Please try again'))
+      error: (err) => this.toastService.error('Error: ' + (err.error?.error || 'Please try again'))
     });
   }
 
   generateAIImage() {
     if (!this.imagePrompt.trim()) {
-      alert('Please enter an image prompt');
+      this.toastService.warning('Please enter an image prompt');
       return;
     }
 
     this.isGeneratingImage = true;
     this.generatedImage = '';
+    this.generatedContent = null;
 
     this.apiService.generateImage(this.imagePrompt).subscribe({
       next: (response: any) => {
         if (response && response.imageUrl) {
           this.generatedImage = response.imageUrl;
-          alert('🎨 Image generated successfully!');
+          this.scheduleRequest.imageUrl = response.imageUrl;
+          
+          this.contentRequest.productName = this.imagePrompt;
+          this.contentService.generateContent(this.contentRequest).subscribe({
+            next: (data: any) => {
+              this.generatedContent = data;
+              this.toastService.success('🎨 Image and content generated successfully!');
+              this.isGeneratingImage = false;
+            },
+            error: (err: any) => {
+              console.error('Content generation failed:', err);
+              this.toastService.warning('Image generated but content generation failed.');
+              this.isGeneratingImage = false;
+            }
+          });
         }
-        this.isGeneratingImage = false;
       },
       error: (err: any) => {
         console.error('Image generation failed:', err);
         this.isGeneratingImage = false;
-        alert('Failed to generate image. Please try again.');
+        this.toastService.error('Failed to generate image. Please try again.');
       }
     });
   }
@@ -247,12 +295,12 @@ export class DashboardComponent implements OnInit {
     if (this.generatedImage) {
       window.open(this.generatedImage, '_blank');
     } else {
-      alert('No image to download');
+      this.toastService.warning('No image to download');
     }
   }
 
   saveToLibrary() {
-    alert('Image saved to library! 📚');
+    this.toastService.success('Image saved to library! 📚');
   }
 
   loadAIInsights() {
@@ -277,8 +325,8 @@ export class DashboardComponent implements OnInit {
   copyImageUrl() {
     if (this.generatedImage) {
       navigator.clipboard.writeText(this.generatedImage).then(() => {
-        alert('Image URL copied to clipboard! 🔗');
-      }).catch(() => alert('Failed to copy URL'));
+        this.toastService.success('Image URL copied to clipboard! 🔗');
+      }).catch(() => this.toastService.error('Failed to copy URL'));
     }
   }
 
@@ -293,11 +341,11 @@ export class DashboardComponent implements OnInit {
       next: (data: any) => {
         this.generatedContent = data;
         this.loading = false;
-        alert('Content generated! ✨');
+        this.toastService.success('Content generated! ✨');
       },
       error: (err: any) => {
         console.error(err);
-        alert('Error: ' + (err.error?.message || 'Failed'));
+        this.toastService.error('Error: ' + (err.error?.message || 'Failed'));
         this.loading = false;
       }
     });
@@ -309,31 +357,31 @@ export class DashboardComponent implements OnInit {
       next: (data: any) => {
         this.generatedCreative = data;
         this.loading = false;
-        alert('Creative generated! 🎨');
+        this.toastService.success('Creative generated! 🎨');
       },
       error: (err: any) => {
         console.error(err);
-        alert('Error: ' + (err.error?.message || 'Failed'));
+        this.toastService.error('Error: ' + (err.error?.message || 'Failed'));
         this.loading = false;
       }
     });
   }
 
   schedulePost() {
-    if (!this.scheduleRequest.campaignId) { alert('Select campaign!'); return; }
-    if (!this.scheduleRequest.caption) { alert('Enter caption!'); return; }
-    if (!this.scheduleRequest.scheduledTime) { alert('Select date/time!'); return; }
+    if (!this.scheduleRequest.campaignId) { this.toastService.warning('Select campaign!'); return; }
+    if (!this.scheduleRequest.caption) { this.toastService.warning('Enter caption!'); return; }
+    if (!this.scheduleRequest.scheduledTime) { this.toastService.warning('Select date/time!'); return; }
     this.loading = true;
     this.contentService.schedulePost(this.scheduleRequest).subscribe({
       next: (data: any) => {
-        alert('Post scheduled! 📅');
+        this.toastService.success('Post scheduled! 📅');
         this.loadScheduledPosts();
         this.resetScheduleForm();
         this.loading = false;
       },
       error: (err: any) => {
         console.error(err);
-        alert('Error: ' + (err.error?.message || 'Failed'));
+        this.toastService.error('Error: ' + (err.error?.message || 'Failed'));
         this.loading = false;
       }
     });
@@ -369,18 +417,39 @@ export class DashboardComponent implements OnInit {
     };
   }
 
+  useHashtag(hashtag: string) {
+    const currentHashtags = this.scheduleRequest.hashtags.trim();
+    if (currentHashtags) {
+      this.scheduleRequest.hashtags = currentHashtags + ' ' + hashtag;
+    } else {
+      this.scheduleRequest.hashtags = hashtag;
+    }
+    this.scrollToScheduler();
+  }
+
   useCaption(caption: string) {
     this.scheduleRequest.caption = caption;
+    this.scrollToScheduler();
   }
 
   useHashtags(hashtags: string[]) {
     this.scheduleRequest.hashtags = hashtags.join(' ');
+    this.scrollToScheduler();
+  }
+
+  scrollToScheduler() {
+    setTimeout(() => {
+      const schedulerElement = document.getElementById('post-scheduler');
+      if (schedulerElement) {
+        schedulerElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   }
 
   createCampaign() {
     const businessId = localStorage.getItem('businessId');
     if (!businessId) {
-      alert('Business ID not found. Please log in again.');
+      this.toastService.error('Business ID not found. Please log in again.');
       return;
     }
 
@@ -396,13 +465,46 @@ export class DashboardComponent implements OnInit {
         this.campaigns.push(campaign);
         this.showCreateCampaign = false;
         this.newCampaign = { name: '', startDate: '', endDate: '' };
-        alert('Campaign created successfully! 🚀');
-        this.loadCampaigns(+businessId); // Refresh the list
+        this.toastService.success('Campaign created successfully! 🚀');
+        this.loadCampaigns(+businessId);
       },
       error: (err) => {
         console.error('Error creating campaign:', err);
-        alert('Failed to create campaign. Please try again.');
+        this.toastService.error('Failed to create campaign. Please try again.');
       }
     });
+  }
+
+  deletePost(postId: number) {
+    if (confirm('Delete this post?')) {
+      this.apiService.deletePost(postId).subscribe({
+        next: () => {
+          this.posts = this.posts.filter(p => p.id !== postId);
+          const businessId = localStorage.getItem('businessId');
+          if (businessId) this.loadAllRecentPosts(+businessId);
+        },
+        error: (err) => console.error(err)
+      });
+    }
+  }
+
+  loadPlatformPosts(platform: string) {
+    const businessId = localStorage.getItem('businessId');
+    if (businessId) {
+      this.apiService.getPostsByPlatform(platform, +businessId).subscribe({
+        next: (posts) => this.platformPosts[platform] = posts,
+        error: (err) => console.error(err)
+      });
+    }
+  }
+
+  viewAllPosts(platform: string) {
+    this.selectedPlatform = platform;
+    this.loadPlatformPosts(platform);
+    this.showAllPostsModal = true;
+  }
+
+  getPostsByPlatform(platform: string): Post[] {
+    return this.posts.filter(p => p.platform === platform);
   }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { SocialMediaService } from '../../services/social-media.service';
 
 @Component({
   selector: 'app-settings',
@@ -61,13 +62,34 @@ export class SettingsComponent implements OnInit {
     pushEngagement: false
   };
 
-  constructor(private router: Router, private apiService: ApiService) {}
+  connections: any[] = [];
+
+  constructor(
+    private router: Router, 
+    private apiService: ApiService,
+    private socialService: SocialMediaService
+  ) {}
 
   ngOnInit() {
     this.loadUserProfile();
     this.loadBusinessInfo();
     this.loadAIPreferences();
     this.loadNotifications();
+    this.loadConnections();
+  }
+
+  loadConnections() {
+    const businessId = localStorage.getItem('businessId');
+    if (businessId) {
+      this.socialService.getConnections(+businessId).subscribe({
+        next: (data) => this.connections = data,
+        error: (err) => console.error('Error loading connections:', err)
+      });
+    }
+  }
+
+  isConnected(platform: string): boolean {
+    return this.connections.some(c => c.platform === platform.toUpperCase() && c.isConnected);
   }
 
   loadUserProfile() {
@@ -161,13 +183,34 @@ export class SettingsComponent implements OnInit {
   }
 
   connectPlatform(platform: string) {
-    const userId = localStorage.getItem('userId') || '1';
-    this.apiService.connectPlatform(platform, +userId).subscribe({
-      next: (response: any) => alert(`${platform} ${response.message} 🔗`),
+    const businessId = localStorage.getItem('businessId');
+    if (!businessId) {
+      alert('Please set up your business first!');
+      return;
+    }
+    
+    this.socialService.connectPlatform(+businessId, platform.toUpperCase()).subscribe({
+      next: () => {
+        alert(`✅ ${platform} connected successfully!\n\nNote: Due to Meta API production approval time, we simulated the OAuth response for this hackathon demo.`);
+        this.loadConnections();
+      },
       error: (err: any) => {
         console.error('Error:', err);
-        alert(`Connecting to ${platform}... 🔗`);
+        alert(`Failed to connect ${platform}`);
       }
+    });
+  }
+
+  disconnectPlatform(platform: string) {
+    const businessId = localStorage.getItem('businessId');
+    if (!businessId) return;
+    
+    this.socialService.disconnectPlatform(+businessId, platform.toUpperCase()).subscribe({
+      next: () => {
+        alert(`${platform} disconnected`);
+        this.loadConnections();
+      },
+      error: (err: any) => console.error('Error:', err)
     });
   }
 

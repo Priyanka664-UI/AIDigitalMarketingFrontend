@@ -8,7 +8,7 @@ export interface SignupRequest {
   category: string;
   targetAudience: string;
   brandTone: string;
-  contact: string;
+  email: string;
   password: string;
 }
 

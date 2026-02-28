@@ -78,7 +78,7 @@
         <p class="section-description">Connect your social media accounts</p>
         
         <div class="platform-connect-list">
-          <div class="platform-connect-item">
+          <div class="platform-connect-item" [class.connected]="isConnected('Instagram')">
             <div class="platform-info">
               <span class="platform-icon">📷</span>
               <div>
@@ -86,9 +86,10 @@
                 <p>Post photos, stories, and reels automatically</p>
               </div>
             </div>
-            <button class="btn-connect" (click)="connectPlatform('Instagram')">Connect</button>
+            <button *ngIf="!isConnected('Instagram')" class="btn-connect" (click)="connectPlatform('Instagram')">Connect</button>
+            <button *ngIf="isConnected('Instagram')" class="btn-disconnect" (click)="disconnectPlatform('Instagram')">✓ Connected</button>
           </div>
-          <div class="platform-connect-item">
+          <div class="platform-connect-item" [class.connected]="isConnected('Facebook')">
             <div class="platform-info">
               <span class="platform-icon">👥</span>
               <div>
@@ -96,9 +97,10 @@
                 <p>Manage posts and engage with your audience</p>
               </div>
             </div>
-            <button class="btn-connect" (click)="connectPlatform('Facebook')">Connect</button>
+            <button *ngIf="!isConnected('Facebook')" class="btn-connect" (click)="connectPlatform('Facebook')">Connect</button>
+            <button *ngIf="isConnected('Facebook')" class="btn-disconnect" (click)="disconnectPlatform('Facebook')">✓ Connected</button>
           </div>
-          <div class="platform-connect-item">
+          <div class="platform-connect-item" [class.connected]="isConnected('LinkedIn')">
             <div class="platform-info">
               <span class="platform-icon">💼</span>
               <div>
@@ -106,9 +108,10 @@
                 <p>Share professional content</p>
               </div>
             </div>
-            <button class="btn-connect" (click)="connectPlatform('LinkedIn')">Connect</button>
+            <button *ngIf="!isConnected('LinkedIn')" class="btn-connect" (click)="connectPlatform('LinkedIn')">Connect</button>
+            <button *ngIf="isConnected('LinkedIn')" class="btn-disconnect" (click)="disconnectPlatform('LinkedIn')">✓ Connected</button>
           </div>
-          <div class="platform-connect-item">
+          <div class="platform-connect-item" [class.connected]="isConnected('WhatsApp')">
             <div class="platform-info">
               <span class="platform-icon">💬</span>
               <div>
@@ -116,7 +119,8 @@
                 <p>Send bulk messages and campaigns</p>
               </div>
             </div>
-            <button class="btn-connect" (click)="connectPlatform('WhatsApp')">Connect</button>
+            <button *ngIf="!isConnected('WhatsApp')" class="btn-connect" (click)="connectPlatform('WhatsApp')">Connect</button>
+            <button *ngIf="isConnected('WhatsApp')" class="btn-disconnect" (click)="disconnectPlatform('WhatsApp')">✓ Connected</button>
           </div>
         </div>
       </div>

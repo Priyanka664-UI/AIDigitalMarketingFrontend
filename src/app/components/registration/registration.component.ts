@@ -50,11 +50,12 @@ export class RegistrationComponent {
       category: validation.normalized_data.category,
       targetAudience: validation.normalized_data.target_audience,
       brandTone: validation.normalized_data.brand_tone,
-      contact: validation.normalized_data.contact,
+      email: validation.normalized_data.contact,
       password: this.formData.password
     }).subscribe({
       next: (response) => {
-        this.router.navigate(['/login']);
+        this.authService.saveAuthData(response);
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.errors = [err.error?.message || 'Registration failed'];

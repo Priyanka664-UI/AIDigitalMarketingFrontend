@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ContentGenerationRequest {
   productName: string;
@@ -45,7 +46,7 @@ export interface PostScheduleRequest {
   providedIn: 'root'
 })
 export class ContentManagementService {
-  private baseUrl = 'http://192.168.0.107:8084/api/content';
+  private baseUrl = `${environment.apiUrl}/content`;
 
   constructor(private http: HttpClient) {}
 
