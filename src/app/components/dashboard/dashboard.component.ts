@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApiService, Business, Campaign, Post } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +26,7 @@ export class DashboardComponent implements OnInit {
     endDate: ''
   };
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     const businessId = localStorage.getItem('businessId');
@@ -105,5 +107,10 @@ export class DashboardComponent implements OnInit {
       'WHATSAPP': '💬'
     };
     return icons[platform] || '📱';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
