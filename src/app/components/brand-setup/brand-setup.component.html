@@ -1,0 +1,59 @@
+<div class="setup-container">
+  <div class="setup-card">
+    <h1>🚀 Setup Your Brand</h1>
+    <p class="subtitle">Tell us about your business and we'll create a personalized marketing strategy</p>
+    
+    <form (ngSubmit)="onSubmit()" #brandForm="ngForm">
+      <div class="form-group">
+        <label>Business Name *</label>
+        <input type="text" [(ngModel)]="business.businessName" name="businessName" required 
+               placeholder="e.g., Artisan Coffee Shop">
+      </div>
+
+      <div class="form-group">
+        <label>Product/Service Details *</label>
+        <textarea [(ngModel)]="business.productDetails" name="productDetails" required 
+                  placeholder="Describe what you offer..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Target Audience *</label>
+        <input type="text" [(ngModel)]="business.targetAudience" name="targetAudience" required 
+               placeholder="e.g., Young professionals, Coffee enthusiasts">
+      </div>
+
+      <div class="form-group">
+        <label>Industry *</label>
+        <input type="text" [(ngModel)]="business.industry" name="industry" required 
+               placeholder="e.g., Food & Beverage">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Brand Tone *</label>
+          <select [(ngModel)]="business.brandTone" name="brandTone" required>
+            <option value="FORMAL">Formal</option>
+            <option value="FRIENDLY">Friendly</option>
+            <option value="PREMIUM">Premium</option>
+            <option value="CASUAL">Casual</option>
+            <option value="PROFESSIONAL">Professional</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Marketing Goal *</label>
+          <select [(ngModel)]="business.marketingGoal" name="marketingGoal" required>
+            <option value="SALES">Increase Sales</option>
+            <option value="AWARENESS">Brand Awareness</option>
+            <option value="LEADS">Generate Leads</option>
+            <option value="ENGAGEMENT">Boost Engagement</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="!brandForm.form.valid" class="btn-primary">
+        Continue to Dashboard →
+      </button>
+    </form>
+  </div>
+</div>

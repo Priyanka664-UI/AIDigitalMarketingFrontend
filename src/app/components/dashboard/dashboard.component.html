@@ -1,0 +1,117 @@
+<div class="dashboard">
+  <header class="header">
+    <h1>📊 Marketing Dashboard</h1>
+    <div class="business-info" *ngIf="business">
+      <h2>{{ business.businessName }}</h2>
+      <span class="badge">{{ business.marketingGoal }}</span>
+    </div>
+  </header>
+
+  <div class="content">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Campaigns</h3>
+        <button class="btn-icon" (click)="showCreateCampaign = true">+</button>
+      </div>
+      
+      <div class="campaign-list">
+        <div *ngFor="let campaign of campaigns" 
+             class="campaign-item"
+             [class.active]="selectedCampaign?.id === campaign.id"
+             (click)="selectCampaign(campaign)">
+          <h4>{{ campaign.name }}</h4>
+          <small>{{ campaign.startDate }} - {{ campaign.endDate }}</small>
+          <span class="status" [class]="campaign.status.toLowerCase()">{{ campaign.status }}</span>
+        </div>
+        
+        <div *ngIf="campaigns.length === 0" class="empty-state">
+          No campaigns yet. Create one to get started!
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div *ngIf="!selectedCampaign" class="welcome">
+        <h2>👋 Welcome to Your Marketing Hub</h2>
+        <p>Create a campaign to start generating AI-powered content</p>
+      </div>
+
+      <div *ngIf="selectedCampaign">
+        <div class="campaign-header">
+          <h2>{{ selectedCampaign.name }}</h2>
+          <button class="btn-primary" (click)="generateContent()">
+            ✨ Generate AI Content
+          </button>
+        </div>
+
+        <div class="analytics-grid" *ngIf="analytics">
+          <div class="stat-card">
+            <div class="stat-value">{{ analytics.totalPosts }}</div>
+            <div class="stat-label">Total Posts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ analytics.totalReach }}</div>
+            <div class="stat-label">Total Reach</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ analytics.totalLikes }}</div>
+            <div class="stat-label">Likes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ analytics.engagementRate | number:'1.1-1' }}%</div>
+            <div class="stat-label">Engagement Rate</div>
+          </div>
+        </div>
+
+        <div class="posts-section">
+          <h3>Content Calendar</h3>
+          <div class="posts-grid">
+            <div *ngFor="let post of posts" class="post-card">
+              <div class="post-header">
+                <span class="platform">{{ getPlatformIcon(post.platform) }} {{ post.platform }}</span>
+                <span class="post-status">{{ post.status }}</span>
+              </div>
+              <img [src]="post.imageUrl" alt="Post image">
+              <div class="post-content">
+                <p class="caption">{{ post.caption }}</p>
+                <p class="hashtags">{{ post.hashtags }}</p>
+                <div class="post-meta">
+                  <small>📅 {{ post.scheduledTime | date:'short' }}</small>
+                </div>
+                <div class="post-stats">
+                  <span>❤️ {{ post.likes }}</span>
+                  <span>💬 {{ post.comments }}</span>
+                  <span>🔄 {{ post.shares }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" *ngIf="showCreateCampaign" (click)="showCreateCampaign = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Create New Campaign</h2>
+      <form (ngSubmit)="createCampaign()">
+        <div class="form-group">
+          <label>Campaign Name</label>
+          <input type="text" [(ngModel)]="newCampaign.name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" [(ngModel)]="newCampaign.startDate" name="startDate" required>
+        </div>
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" [(ngModel)]="newCampaign.endDate" name="endDate" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" (click)="showCreateCampaign = false">Cancel</button>
+          <button type="submit" class="btn-primary">Create Campaign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
