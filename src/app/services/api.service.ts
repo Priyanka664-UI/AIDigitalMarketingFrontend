@@ -39,7 +39,7 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8082/api';
+  private baseUrl = 'http://192.168.0.102:8081/api';
 
   constructor(private http: HttpClient) {}
 
@@ -109,7 +109,7 @@ export class ApiService {
   }
 
   generateImage(prompt: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/ai/generate-image`, { prompt });
+    return this.http.post(`${this.baseUrl}/ai/image/generate`, { prompt });
   }
 
   regenerateCaption(postId: number): Observable<any> {
