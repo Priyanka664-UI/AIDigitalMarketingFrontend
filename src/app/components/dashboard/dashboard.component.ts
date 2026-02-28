@@ -5,12 +5,13 @@ import { Router, RouterModule } from '@angular/router';
 import { ApiService, Business, Campaign, Post } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { SettingsComponent } from '../settings/settings.component';
 import { ContentManagementService } from '../../services/content-management.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, CalendarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, CalendarComponent, SettingsComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -26,6 +27,9 @@ export class DashboardComponent implements OnInit {
   contentSubTab: string = 'calendar';
   calendarView: string = 'monthly';
   platformStatus: any[] = [];
+  showSettingsMenu: boolean = false;
+  settingsTab: string = 'account';
+  private hideMenuTimeout: any;
 
   loading = false;
   contentRequest = { productName: '', targetAudience: '', tone: 'PROFESSIONAL', goal: 'SALES', platform: 'INSTAGRAM' };
@@ -170,6 +174,27 @@ export class DashboardComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  onSettingsLeave() {
+    this.hideMenuTimeout = setTimeout(() => {
+      this.showSettingsMenu = false;
+    }, 300);
+  }
+
+  cancelHideMenu() {
+    if (this.hideMenuTimeout) {
+      clearTimeout(this.hideMenuTimeout);
+    }
+  }
+
+  navigateToSettings(tab: string) {
+    this.activeTab = 'settings';
+    this.settingsTab = tab;
+    this.showSettingsMenu = false;
+    if (this.hideMenuTimeout) {
+      clearTimeout(this.hideMenuTimeout);
+    }
   }
 
   generateAIContent() {

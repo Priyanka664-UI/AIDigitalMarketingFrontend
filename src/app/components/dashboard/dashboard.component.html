@@ -39,11 +39,33 @@
         </div>
         Integrations
       </button>
-      <button class="nav-item" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'">
+      <button class="nav-item" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'" (mouseenter)="showSettingsMenu = true" (mouseleave)="onSettingsLeave()">
         <div class="icon-container">
           <iconify-icon icon="lucide:settings" style="font-size: 18px"></iconify-icon>
         </div>
         Settings
+        <div class="settings-dropdown" *ngIf="showSettingsMenu" (mouseenter)="cancelHideMenu()" (mouseleave)="onSettingsLeave()">
+          <button class="dropdown-item" (click)="navigateToSettings('account')">
+            <iconify-icon icon="lucide:user" style="font-size: 16px"></iconify-icon>
+            Account & Business
+          </button>
+          <button class="dropdown-item" (click)="navigateToSettings('platforms')">
+            <iconify-icon icon="lucide:link" style="font-size: 16px"></iconify-icon>
+            Social Platforms
+          </button>
+          <button class="dropdown-item" (click)="navigateToSettings('ai')">
+            <iconify-icon icon="lucide:sparkles" style="font-size: 16px"></iconify-icon>
+            AI Preferences
+          </button>
+          <button class="dropdown-item" (click)="navigateToSettings('billing')">
+            <iconify-icon icon="lucide:credit-card" style="font-size: 16px"></iconify-icon>
+            Billing & Plans
+          </button>
+          <button class="dropdown-item" (click)="navigateToSettings('notifications')">
+            <iconify-icon icon="lucide:bell" style="font-size: 16px"></iconify-icon>
+            Notifications
+          </button>
+        </div>
       </button>
     </nav>
 
@@ -537,9 +559,8 @@
       <p>Manage your social media connections here.</p>
     </div>
 
-    <div *ngIf="activeTab === 'settings'" class="card">
-      <h3 class="card-title">⚙️ Settings</h3>
-      <p>Configure your account and business settings.</p>
+    <div *ngIf="activeTab === 'settings'">
+      <app-settings [initialTab]="settingsTab"></app-settings>
     </div>
 
   </main>

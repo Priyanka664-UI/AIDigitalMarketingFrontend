@@ -28,6 +28,20 @@
 
     <form (ngSubmit)="onSubmit()" #regForm="ngForm">
       <div class="form-grid">
+        <div class="form-group">
+          <label for="owner_name">Owner Name</label>
+          <input type="text" id="owner_name" [(ngModel)]="formData.owner_name" name="owner_name"
+            placeholder="Enter your name" required #ownerName="ngModel"
+            [class.invalid]="ownerName.invalid && ownerName.touched">
+        </div>
+
+        <div class="form-group">
+          <label for="owner_email">Owner Email</label>
+          <input type="email" id="owner_email" [(ngModel)]="formData.owner_email" name="owner_email"
+            placeholder="your@email.com" required #ownerEmail="ngModel"
+            [class.invalid]="ownerEmail.invalid && ownerEmail.touched">
+        </div>
+
         <div class="form-group full-width">
           <label for="business_name">Business Name</label>
           <input type="text" id="business_name" [(ngModel)]="formData.business_name" name="business_name"

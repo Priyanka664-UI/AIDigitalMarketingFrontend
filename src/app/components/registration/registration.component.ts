@@ -14,6 +14,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegistrationComponent {
   formData = {
+    owner_name: '',
+    owner_email: '',
     business_name: '',
     category: '',
     target_audience: '',

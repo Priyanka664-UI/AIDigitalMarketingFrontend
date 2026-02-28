@@ -1,0 +1,221 @@
+<div class="settings-page">
+  <div class="settings-container">
+    <main class="settings-content">
+      <!-- Account & Business Combined -->
+      <div *ngIf="activeTab === 'account'" class="settings-section">
+        <h2>Account & Business Settings</h2>
+        
+        <div class="settings-grid">
+          <!-- Profile Card -->
+          <div class="settings-card profile-card">
+            <div class="card-header">
+              <iconify-icon icon="lucide:user"></iconify-icon>
+              <h3>Personal Profile</h3>
+            </div>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" class="form-control" [(ngModel)]="profile.name" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" class="form-control" [(ngModel)]="profile.email" readonly>
+              <small class="form-hint">Login email - cannot be changed</small>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" class="form-control" [(ngModel)]="profile.phone" placeholder="+1 234 567 8900">
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" class="form-control" [(ngModel)]="profile.password" placeholder="Leave blank to keep current">
+            </div>
+            <button class="btn-primary" (click)="saveProfile()">Save Profile</button>
+          </div>
+
+          <!-- Business Card -->
+          <div class="settings-card business-card">
+            <div class="card-header">
+              <iconify-icon icon="lucide:briefcase"></iconify-icon>
+              <h3>Business Information</h3>
+            </div>
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" class="form-control" [(ngModel)]="business.businessName" placeholder="My Business">
+            </div>
+            <div class="form-group">
+              <label>Industry</label>
+              <select class="form-control" [(ngModel)]="business.industry">
+                <option>E-commerce</option>
+                <option>Technology</option>
+                <option>Healthcare</option>
+                <option>Education</option>
+                <option>Food & Beverage</option>
+                <option>Fashion</option>
+                <option>Real Estate</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Brand Tone</label>
+              <select class="form-control" [(ngModel)]="business.brandTone">
+                <option value="PROFESSIONAL">Professional</option>
+                <option value="FRIENDLY">Friendly</option>
+                <option value="PREMIUM">Luxury</option>
+                <option value="CASUAL">Casual</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Target Audience</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="business.targetAudience" placeholder="Describe your target audience..."></textarea>
+            </div>
+            <button class="btn-primary" (click)="saveBusiness()">Save Business Info</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Platforms -->
+      <div *ngIf="activeTab === 'platforms'" class="settings-section">
+        <h2>🔗 Social Media Platforms</h2>
+        <p class="section-description">Connect your social media accounts</p>
+        
+        <div class="platform-connect-list">
+          <div class="platform-connect-item">
+            <div class="platform-info">
+              <span class="platform-icon">📷</span>
+              <div>
+                <h4>Instagram Business</h4>
+                <p>Post photos, stories, and reels automatically</p>
+              </div>
+            </div>
+            <button class="btn-connect" (click)="connectPlatform('Instagram')">Connect</button>
+          </div>
+          <div class="platform-connect-item">
+            <div class="platform-info">
+              <span class="platform-icon">👥</span>
+              <div>
+                <h4>Facebook Page</h4>
+                <p>Manage posts and engage with your audience</p>
+              </div>
+            </div>
+            <button class="btn-connect" (click)="connectPlatform('Facebook')">Connect</button>
+          </div>
+          <div class="platform-connect-item">
+            <div class="platform-info">
+              <span class="platform-icon">💼</span>
+              <div>
+                <h4>LinkedIn Company Page</h4>
+                <p>Share professional content</p>
+              </div>
+            </div>
+            <button class="btn-connect" (click)="connectPlatform('LinkedIn')">Connect</button>
+          </div>
+          <div class="platform-connect-item">
+            <div class="platform-info">
+              <span class="platform-icon">💬</span>
+              <div>
+                <h4>WhatsApp Business</h4>
+                <p>Send bulk messages and campaigns</p>
+              </div>
+            </div>
+            <button class="btn-connect" (click)="connectPlatform('WhatsApp')">Connect</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Preferences -->
+      <div *ngIf="activeTab === 'ai'" class="settings-section">
+        <h2>🤖 AI Preferences</h2>
+        <p class="section-description">Customize AI content generation</p>
+
+        <div class="form-group">
+          <label>Default Content Tone</label>
+          <select class="form-control" [(ngModel)]="aiPreferences.defaultTone">
+            <option>Professional</option>
+            <option>Friendly</option>
+            <option>Luxury</option>
+            <option>Casual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Default Image Style</label>
+          <select class="form-control" [(ngModel)]="aiPreferences.defaultImageStyle">
+            <option>Realistic</option>
+            <option>Artistic</option>
+            <option>Minimalist</option>
+            <option>Vibrant</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Content Generation Frequency</label>
+          <select class="form-control" [(ngModel)]="aiPreferences.contentFrequency">
+            <option>Daily</option>
+            <option>Weekly</option>
+            <option>Bi-weekly</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="toggle-switch">
+            <input type="checkbox" id="autoSchedule" [(ngModel)]="aiPreferences.autoSchedule">
+            <label for="autoSchedule">Enable auto-scheduling</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="toggle-switch">
+            <input type="checkbox" id="aiSuggestions" [(ngModel)]="aiPreferences.aiSuggestions">
+            <label for="aiSuggestions">Receive AI suggestions</label>
+          </div>
+        </div>
+        <button class="btn-primary" (click)="saveAIPreferences()">💾 Save Preferences</button>
+      </div>
+
+      <!-- Billing -->
+      <div *ngIf="activeTab === 'billing'" class="settings-section">
+        <h2>💳 Billing & Subscription</h2>
+        <div class="current-plan">
+          <h3>Current Plan: <span class="plan-badge">Free</span></h3>
+        </div>
+        <div class="pricing-cards">
+          <div class="pricing-card">
+            <h4>Starter</h4>
+            <div class="price">$29<span>/month</span></div>
+            <ul>
+              <li>✅ 100 Posts/month</li>
+              <li>✅ 2 Platforms</li>
+            </ul>
+            <button class="btn-upgrade" (click)="upgradePlan('Starter')">Upgrade</button>
+          </div>
+          <div class="pricing-card featured">
+            <h4>Professional</h4>
+            <div class="price">$99<span>/month</span></div>
+            <ul>
+              <li>✅ 500 Posts/month</li>
+              <li>✅ All Platforms</li>
+            </ul>
+            <button class="btn-upgrade" (click)="upgradePlan('Professional')">Upgrade</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div *ngIf="activeTab === 'notifications'" class="settings-section">
+        <h2>🔔 Notifications</h2>
+        <div class="notification-group">
+          <h4>Email Notifications</h4>
+          <div class="toggle-switch">
+            <input type="checkbox" id="emailPost" [(ngModel)]="notifications.emailPost">
+            <label for="emailPost">Post published</label>
+          </div>
+          <div class="toggle-switch">
+            <input type="checkbox" id="emailFail" [(ngModel)]="notifications.emailFail">
+            <label for="emailFail">Post failed</label>
+          </div>
+          <div class="toggle-switch">
+            <input type="checkbox" id="emailWeekly" [(ngModel)]="notifications.emailWeekly">
+            <label for="emailWeekly">Weekly report</label>
+          </div>
+        </div>
+        <button class="btn-primary" (click)="saveNotifications()">💾 Save Preferences</button>
+      </div>
+    </main>
+  </div>
+</div>

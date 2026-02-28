@@ -39,7 +39,7 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://192.168.0.107:8084/api';
+  private baseUrl = 'http://localhost:8082/api';
 
   constructor(private http: HttpClient) { }
 
@@ -148,5 +148,46 @@ export class ApiService {
 
   getCalendarSummary(businessId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/calendar/summary?businessId=${businessId}`);
+  }
+
+  // User APIs
+  getUser(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users/${userId}`);
+  }
+
+  updateUser(userId: number, data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/users/${userId}`, data);
+  }
+
+  changePassword(userId: number, newPassword: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/${userId}/change-password`, { newPassword });
+  }
+
+  upgradePlan(plan: string, userId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/${userId}/upgrade-plan`, { plan });
+  }
+
+  updateBusiness(businessId: number, business: any): Observable<Business> {
+    return this.http.put<Business>(`${this.baseUrl}/business/${businessId}`, business);
+  }
+
+  connectPlatform(platform: string, userId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/platforms/connect`, { platform, userId });
+  }
+
+  getAIPreferences(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users/${userId}/ai-preferences`);
+  }
+
+  saveAIPreferences(userId: number, preferences: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/${userId}/ai-preferences`, preferences);
+  }
+
+  getNotificationSettings(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users/${userId}/notification-settings`);
+  }
+
+  saveNotificationSettings(userId: number, settings: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/${userId}/notification-settings`, settings);
   }
 }
