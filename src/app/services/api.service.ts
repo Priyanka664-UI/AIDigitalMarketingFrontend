@@ -39,9 +39,9 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8082/api';
+  private baseUrl = 'http://localhost:8087/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Business APIs
   createBusiness(business: Business): Observable<Business> {

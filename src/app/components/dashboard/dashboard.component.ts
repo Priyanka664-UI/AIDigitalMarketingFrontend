@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,10 +10,11 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardComponent implements OnInit {
-  business: Business | null = null;
+  business: any = null;
   campaigns: Campaign[] = [];
   selectedCampaign: Campaign | null = null;
   posts: Post[] = [];
@@ -23,55 +24,99 @@ export class DashboardComponent implements OnInit {
   contentSubTab: string = 'calendar';
   calendarView: string = 'monthly';
   platformStatus: any[] = [];
-  
+
   imagePrompt: string = '';
   generatedImage: string = '';
   isGeneratingImage: boolean = false;
   aiInsights: any = null;
-  
+  engagementAnalytics: any = null;
+  platformComparison: any = null;
+  monthlyReport: any = null;
+
   aiContentConfig = {
     days: 7,
     tone: 'Professional',
     platform: 'INSTAGRAM'
   };
-  
+
   dashboardStats = {
-    totalPostsThisMonth: 0,
-    draftPosts: 0,
-    followersGroup: '0',
+    totalPosts: 0,
     totalReach: '0',
-    scheduledPosts: 0
+    avgEngagementRate: 0,
+    scheduledPosts: 0,
+    aiCredits: 0,
+    creditsResetDays: 0,
+    postsTrend: '',
+    engagementTrend: ''
   };
-  
+
   newCampaign = {
     name: '',
     startDate: '',
     endDate: ''
   };
 
-  constructor(private apiService: ApiService, private authService: AuthService, private router: Router) {}
+  constructor(private apiService: ApiService, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     const businessId = localStorage.getItem('businessId');
     if (businessId) {
-      this.loadBusiness(+businessId);
-      this.loadCampaigns(+businessId);
-      this.loadDashboardStats(+businessId);
-      this.loadPlatformStatus(+businessId);
+      const bId = +businessId;
+      this.loadBusiness(bId);
+      this.loadCampaigns(bId);
+      this.loadDashboardStats(bId);
+      this.loadPlatformStatus(bId);
       this.loadAIInsights();
+      this.loadAllRecentPosts(bId);
+      this.loadAnalytics(bId);
     }
+  }
+
+  loadAnalytics(businessId: number) {
+    this.apiService.getEngagementAnalytics(businessId).subscribe({
+      next: (data) => this.engagementAnalytics = data,
+      error: (err) => console.error('Error loading engagement analytics:', err)
+    });
+
+    this.apiService.getPlatformComparison(businessId).subscribe({
+      next: (data) => this.platformComparison = data,
+      error: (err) => console.error('Error loading platform comparison:', err)
+    });
+
+    this.apiService.getMonthlyReport(businessId).subscribe({
+      next: (data) => this.monthlyReport = data,
+      error: (err) => console.error('Error loading monthly report:', err)
+    });
+  }
+
+  loadAllRecentPosts(businessId: number) {
+    // For now, we'll just fetch posts from the first campaign if available
+    this.apiService.getCampaignsByBusiness(businessId).subscribe({
+      next: (campaigns) => {
+        if (campaigns && campaigns.length > 0) {
+          this.apiService.getCampaignPosts(campaigns[0].id!).subscribe({
+            next: (posts) => this.posts = posts,
+            error: (err) => console.error('Error loading posts:', err)
+          });
+        }
+      }
+    });
   }
 
   loadDashboardStats(businessId: number) {
     this.apiService.getDashboardStats(businessId).subscribe({
-      next: (data) => this.dashboardStats = data,
+      next: (data) => {
+        this.dashboardStats = data;
+      },
       error: (err) => console.error('Error loading stats:', err)
     });
   }
 
   loadPlatformStatus(businessId: number) {
     this.apiService.getPlatformStatus(businessId).subscribe({
-      next: (data) => this.platformStatus = data,
+      next: (data) => {
+        this.platformStatus = data;
+      },
       error: (err) => console.error('Error loading platform status:', err)
     });
   }
@@ -85,7 +130,12 @@ export class DashboardComponent implements OnInit {
 
   loadCampaigns(businessId: number) {
     this.apiService.getCampaignsByBusiness(businessId).subscribe({
-      next: (data) => this.campaigns = data,
+      next: (data) => {
+        this.campaigns = data;
+        if (this.campaigns.length > 0 && !this.selectedCampaign) {
+          this.selectedCampaign = this.campaigns[0];
+        }
+      },
       error: (err) => console.error('Error loading campaigns:', err)
     });
   }
@@ -107,46 +157,14 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  selectCampaign(campaign: Campaign) {
-    this.selectedCampaign = campaign;
-    this.loadCampaignPosts(campaign.id!);
-    this.loadAnalytics(campaign.id!);
-  }
-
-  loadCampaignPosts(campaignId: number) {
-    this.apiService.getCampaignPosts(campaignId).subscribe({
-      next: (data) => this.posts = data,
-      error: (err) => console.error('Error loading posts:', err)
-    });
-  }
-
-  loadAnalytics(campaignId: number) {
-    this.apiService.getCampaignAnalytics(campaignId).subscribe({
-      next: (data) => this.analytics = data,
-      error: (err) => console.error('Error loading analytics:', err)
-    });
-  }
-
-  generateContent() {
-    if (this.selectedCampaign) {
-      this.apiService.generateContent(this.selectedCampaign.id!).subscribe({
-        next: (posts) => {
-          this.posts = posts;
-          alert('Content generated successfully! 🎉');
-        },
-        error: (err) => console.error('Error generating content:', err)
-      });
-    }
-  }
-
   getPlatformIcon(platform: string): string {
-    const icons: any = {
-      'INSTAGRAM': '📷',
-      'FACEBOOK': '👥',
-      'LINKEDIN': '💼',
-      'WHATSAPP': '💬'
-    };
-    return icons[platform] || '📱';
+    const p = platform.toUpperCase();
+    if (p.includes('INSTAGRAM')) return 'lucide:instagram';
+    if (p.includes('FACEBOOK')) return 'lucide:facebook';
+    if (p.includes('LINKEDIN')) return 'lucide:linkedin';
+    if (p.includes('WHATSAPP')) return 'lucide:message-square';
+    if (p.includes('TWITTER') || p.includes('X')) return 'lucide:twitter';
+    return 'lucide:share-2';
   }
 
   logout() {
@@ -154,42 +172,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  generateNewContent() {
-    const businessId = localStorage.getItem('businessId');
-    if (businessId) {
-      this.apiService.generateAIContent({
-        campaignId: this.selectedCampaign?.id || 1,
-        days: 7,
-        tone: 'Professional',
-        platform: 'INSTAGRAM'
-      }).subscribe({
-        next: (data) => alert('Content generated successfully! ✨'),
-        error: (err) => console.error('Error:', err)
-      });
-    }
-  }
-
-  regenerateCaption() {
-    if (this.posts.length > 0) {
-      this.apiService.regenerateCaption(this.posts[0].id!).subscribe({
-        next: (data) => {
-          alert('Caption regenerated! 🔄');
-          this.posts[0] = data;
-        },
-        error: (err) => console.error('Error:', err)
-      });
-    }
-  }
-
   generateAIContent() {
     const businessId = localStorage.getItem('businessId');
-    if (!businessId) {
-      alert('Please select a business first');
-      return;
-    }
-
-    if (!this.selectedCampaign) {
-      alert('Please select a campaign first');
+    if (!businessId || !this.selectedCampaign) {
+      alert('Please ensure you have a business and campaign selected.');
       return;
     }
 
@@ -198,58 +184,34 @@ export class DashboardComponent implements OnInit {
       ...this.aiContentConfig
     }).subscribe({
       next: (response: any) => {
-        alert(`${response.count || this.aiContentConfig.days} days of content generated! ✨`);
-        if (response.posts) {
-          this.posts = response.posts;
-        }
+        alert('Content generated successfully! ✨');
+        this.loadAllRecentPosts(+businessId);
+        this.activeTab = 'dashboard';
       },
-      error: (err) => {
-        console.error('Error:', err);
-        alert('Error generating content: ' + (err.error?.error || 'Please try again'));
-      }
+      error: (err) => alert('Error generating content')
     });
   }
 
   generateAIImage() {
-    if (!this.imagePrompt.trim()) {
-      alert('Please enter an image prompt');
-      return;
-    }
+    if (!this.imagePrompt.trim()) return;
 
     this.isGeneratingImage = true;
-    this.generatedImage = '';
-    console.log('Calling API with prompt:', this.imagePrompt);
-
     this.apiService.generateImage(this.imagePrompt).subscribe({
       next: (response: any) => {
-        console.log('Full response:', response);
-        
         if (response && response.imageUrl) {
           this.generatedImage = response.imageUrl;
-          console.log('Image URL set to:', this.generatedImage);
-          alert('Image generated! 🎨');
-        } else {
-          console.error('No imageUrl in response');
-          alert('Error: No image URL received');
         }
         this.isGeneratingImage = false;
       },
       error: (err) => {
-        console.error('API Error:', err);
-        alert('Error: ' + (err.message || 'Failed to generate image'));
         this.isGeneratingImage = false;
+        alert('Failed to generate image');
       }
     });
   }
 
   downloadImage() {
-    if (!this.generatedImage) {
-      alert('No image to download');
-      return;
-    }
-    
-    console.log('Downloading:', this.generatedImage);
-    window.open(this.generatedImage, '_blank');
+    if (this.generatedImage) window.open(this.generatedImage, '_blank');
   }
 
   saveToLibrary() {
@@ -261,13 +223,12 @@ export class DashboardComponent implements OnInit {
     if (businessId) {
       this.apiService.getAIInsights(+businessId).subscribe({
         next: (data) => this.aiInsights = data,
-        error: (err) => console.error('Error:', err)
+        error: (err) => console.error('Error loading AI insights:', err)
       });
     }
   }
 
   onImageError(event: any) {
-    console.error('Image failed to load:', this.generatedImage);
     event.target.src = 'https://via.placeholder.com/1024x1024?text=Image+Load+Error';
   }
 
@@ -275,28 +236,13 @@ export class DashboardComponent implements OnInit {
     if (this.generatedImage) {
       navigator.clipboard.writeText(this.generatedImage).then(() => {
         alert('Image URL copied to clipboard! 🔗');
-      }).catch(err => {
-        console.error('Copy failed:', err);
-        alert('Failed to copy URL');
       });
     }
   }
 
-  testBackend() {
-    console.log('Testing backend connection...');
-    this.apiService.generateImage('test').subscribe({
-      next: (response) => {
-        console.log('Backend test response:', response);
-        alert('✅ Backend connected! Response: ' + JSON.stringify(response));
-      },
-      error: (err) => {
-        console.error('Backend test error:', err);
-        alert('❌ Backend error: ' + err.message);
-      }
-    });
-  }
-
-  onImageLoad() {
-    console.log('Image loaded successfully');
+  getFirstName(): string {
+    const name = this.business?.businessName || 'User';
+    return name.split(' ')[0];
   }
 }
+

@@ -1,163 +1,258 @@
-<div class="dashboard">
-  <header class="header">
-    <h1>🧠 MarketMindAI</h1>
-    <nav class="top-nav">
-      <button class="nav-btn" [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
-        <span class="icon">📊</span>
-        <span>Dashboard</span>
+<div class="app-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">
+        <iconify-icon icon="lucide:brain-circuit" style="font-size: 20px; color: white"></iconify-icon>
+      </div>
+      <div class="logo-text">MarketMind AI</div>
+    </div>
+
+    <nav class="nav-menu">
+      <button class="nav-item" [class.active]="activeTab === 'dashboard'" (click)="activeTab = 'dashboard'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:layout-dashboard" style="font-size: 18px"></iconify-icon>
+        </div>
+        Dashboard
       </button>
-      <button class="nav-btn" [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">
-        <span class="icon">📝</span>
-        <span>Content Manager</span>
+      <button class="nav-item" [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:sparkles" style="font-size: 18px"></iconify-icon>
+        </div>
+        Content Generator
       </button>
-      <button class="nav-btn" [class.active]="activeTab === 'ai'" (click)="activeTab = 'ai'">
-        <span class="icon">🤖</span>
-        <span>AI Engine</span>
+      <button class="nav-item" (click)="activeTab = 'calendar'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:calendar-days" style="font-size: 18px"></iconify-icon>
+        </div>
+        Calendar
       </button>
-      <button class="nav-btn" [class.active]="activeTab === 'analytics'" (click)="activeTab = 'analytics'">
-        <span class="icon">📈</span>
-        <span>Analytics & Reports</span>
+      <button class="nav-item" [class.active]="activeTab === 'analytics'" (click)="activeTab = 'analytics'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:bar-chart-3" style="font-size: 18px"></iconify-icon>
+        </div>
+        Analytics
       </button>
-      <button class="nav-btn" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'">
-        <span class="icon">⚙️</span>
-        <span>Settings</span>
+      <button class="nav-item" (click)="activeTab = 'integrations'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:cable" style="font-size: 18px"></iconify-icon>
+        </div>
+        Integrations
+      </button>
+      <button class="nav-item" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:settings" style="font-size: 18px"></iconify-icon>
+        </div>
+        Settings
       </button>
     </nav>
-    <button class="btn-logout" (click)="logout()">Logout</button>
-  </header>
 
-  <div class="content" *ngIf="activeTab === 'dashboard'">
-    <main class="dashboard-main">
-      <!-- Stats Overview -->
+    <div class="sidebar-footer">
+      <div class="user-profile" (click)="logout()">
+        <div class="user-avatar-initials">{{ business?.businessName?.charAt(0) || 'U' }}</div>
+        <div class="user-details">
+          <div class="user-name">{{ business?.businessName }}</div>
+          <span class="user-plan">{{ business?.tier || 'Pro Plan' }}</span>
+        </div>
+        <div
+          style="margin-left: auto; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
+          <iconify-icon icon="lucide:log-out" style="font-size: 16px; color: var(--muted-foreground)"></iconify-icon>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <header class="header">
+      <div>
+        <h1 class="header-title">Welcome back, {{ getFirstName() }} 👋</h1>
+        <p class="header-subtitle">Here's what's happening with your marketing campaigns today.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-icon">
+          <iconify-icon icon="lucide:bell" style="font-size: 20px"></iconify-icon>
+        </button>
+        <button class="btn btn-primary" (click)="showCreateCampaign = true">
+          <iconify-icon icon="lucide:plus" style="font-size: 16px; color: white"></iconify-icon>
+          New Campaign
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard View -->
+    <div *ngIf="activeTab === 'dashboard'">
+      <!-- Stats Grid -->
       <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-icon">📊</div>
-          <div class="stat-info">
-            <div class="stat-value">{{ dashboardStats.totalPostsThisMonth }}</div>
-            <div class="stat-label">Total Posts This Month</div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Total Posts Generated</span>
+            <div class="stat-icon">
+              <iconify-icon icon="lucide:file-text" style="font-size: 18px"></iconify-icon>
+            </div>
+          </div>
+          <div class="stat-value">{{ dashboardStats.totalPosts }}</div>
+          <div class="stat-trend">
+            <iconify-icon icon="lucide:trending-up" style="font-size: 14px" class="trend-up"></iconify-icon>
+            <span class="trend-up">{{ dashboardStats.postsTrend }}</span>
+            <span style="color: var(--muted-foreground)">from last month</span>
           </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-icon">📝</div>
-          <div class="stat-info">
-            <div class="stat-value">{{ dashboardStats.draftPosts }}</div>
-            <div class="stat-label">Draft Posts</div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Avg. Engagement Rate</span>
+            <div class="stat-icon">
+              <iconify-icon icon="lucide:activity" style="font-size: 18px"></iconify-icon>
+            </div>
+          </div>
+          <div class="stat-value">{{ dashboardStats.avgEngagementRate }}%</div>
+          <div class="stat-trend">
+            <iconify-icon icon="lucide:trending-up" style="font-size: 14px" class="trend-up"></iconify-icon>
+            <span class="trend-up">{{ dashboardStats.engagementTrend }}</span>
+            <span style="color: var(--muted-foreground)">from last month</span>
           </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-icon">👥</div>
-          <div class="stat-info">
-            <div class="stat-value">{{ dashboardStats.followersGroup }}</div>
-            <div class="stat-label">Followers Group</div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Total Reach</span>
+            <div class="stat-icon">
+              <iconify-icon icon="lucide:share-2" style="font-size: 18px"></iconify-icon>
+            </div>
+          </div>
+          <div class="stat-value">{{ dashboardStats.totalReach }}</div>
+          <div class="stat-trend">
+            <iconify-icon icon="lucide:minus" style="font-size: 14px" class="trend-neutral"></iconify-icon>
+            <span class="trend-neutral">No change</span>
           </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-icon">📈</div>
-          <div class="stat-info">
-            <div class="stat-value">{{ dashboardStats.totalReach }}</div>
-            <div class="stat-label">Total Reach</div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">AI Credits Remaining</span>
+            <div class="stat-icon">
+              <iconify-icon icon="lucide:zap" style="font-size: 18px"></iconify-icon>
+            </div>
           </div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-icon">⏰</div>
-          <div class="stat-info">
-            <div class="stat-value">{{ dashboardStats.scheduledPosts }}</div>
-            <div class="stat-label">Scheduled Posts</div>
+          <div class="stat-value">{{ dashboardStats.aiCredits }}</div>
+          <div class="stat-trend">
+            <span style="color: var(--muted-foreground)">Resets in {{ dashboardStats.creditsResetDays }} days</span>
           </div>
         </div>
       </div>
 
-      <!-- Platform Status & Quick Actions -->
+      <!-- Main Dashboard Grid -->
       <div class="dashboard-grid">
-        <div class="platform-status">
-          <h3>Platform Status</h3>
-          <div class="platform-list">
-            <div *ngFor="let platform of platformStatus" class="platform-item">
-              <div class="platform-info">
-                <span class="platform-icon">{{ platform.icon }}</span>
-                <span class="platform-name">{{ platform.name }}</span>
+        <div style="display: flex; flex-direction: column; gap: 24px">
+          <!-- AI Quick Generate Banner -->
+          <div class="generate-banner">
+            <h2 class="generate-title">Create your next viral post</h2>
+            <p class="generate-subtitle">Describe your topic, select platforms, and let AI do the heavy lifting.</p>
+            <div class="generate-input-group">
+              <div style="padding-left: 8px; display: flex; align-items: center;">
+                <iconify-icon icon="lucide:sparkles"
+                  style="font-size: 20px; color: rgba(255, 255, 255, 0.7)"></iconify-icon>
               </div>
-              <span class="status-badge" [class.connected]="platform.connected" [class.disconnected]="!platform.connected">
-                {{ platform.connected ? 'Connected' : 'Not Connected' }}
-              </span>
+              <input type="text" class="generate-input" placeholder="E.g., A post about our new summer coffee blend..."
+                [(ngModel)]="imagePrompt" />
+              <button class="generate-btn" (click)="generateAIContent()">
+                Generate
+                <iconify-icon icon="lucide:arrow-right" style="font-size: 16px"></iconify-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Audience Reach Chart Mockup -->
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h3 class="card-title" style="margin-bottom: 0">Audience Reach</h3>
+              <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 13px">
+                Last 7 Days
+                <iconify-icon icon="lucide:chevron-down" style="font-size: 14px"></iconify-icon>
+              </button>
+            </div>
+            <div class="chart-container" *ngIf="engagementAnalytics">
+              <div *ngFor="let val of engagementAnalytics.reachGraph; let i = index" class="chart-bar"
+                [class.primary]="i === 3 || i === 6" [style.height.%]="(val / 3000) * 100"></div>
+            </div>
+            <div class="chart-container" *ngIf="!engagementAnalytics">
+              <div class="chart-bar" style="height: 40%"></div>
+              <div class="chart-bar" style="height: 55%"></div>
+              <div class="chart-bar" style="height: 45%"></div>
+              <div class="chart-bar primary" style="height: 80%"></div>
+              <div class="chart-bar" style="height: 60%"></div>
+              <div class="chart-bar" style="height: 65%"></div>
+              <div class="chart-bar primary" style="height: 90%"></div>
+            </div>
+            <div class="chart-labels">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
             </div>
           </div>
         </div>
 
-        <div class="quick-actions">
-          <h3>Quick Actions</h3>
-          <button class="action-btn" (click)="generateNewContent()">
-            <span class="action-icon">✨</span>
-            <span>Generate New Content</span>
-          </button>
-          <button class="action-btn" (click)="regenerateCaption()">
-            <span class="action-icon">🔄</span>
-            <span>Regenerate Caption</span>
-          </button>
+        <div style="display: flex; flex-direction: column; gap: 24px">
+          <!-- Recent Activity -->
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h3 class="card-title" style="margin-bottom: 0">Recent Activity</h3>
+              <a href="#" style="color: var(--primary); text-decoration: none; font-size: 13px; font-weight: 500;"
+                (click)="activeTab = 'calendar'">View all</a>
+            </div>
+
+            <div class="activity-list">
+              <div *ngFor="let post of posts | slice:0:3" class="activity-item">
+                <img
+                  [src]="post.imageUrl || 'https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'"
+                  alt="Post thumbnail" class="activity-img" />
+                <div class="activity-content">
+                  <div class="activity-header">
+                    <div class="activity-platform">
+                      <iconify-icon
+                        [icon]="post.platform === 'INSTAGRAM' ? 'lucide:instagram' : post.platform === 'FACEBOOK' ? 'lucide:facebook' : 'lucide:linkedin'"
+                        style="font-size: 14px"></iconify-icon>
+                      {{ post.platform }}
+                    </div>
+                    <span class="badge" [ngClass]="post.status.toLowerCase()">{{ post.status }}</span>
+                  </div>
+                  <p class="activity-text">{{ post.caption }}</p>
+                  <div class="activity-meta">
+                    <span>{{ post.scheduledTime | date:'short' }}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="posts.length === 0"
+                style="text-align: center; color: var(--muted-foreground); padding: 20px;">
+                No recent activity.
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Integrations -->
+          <div class="card">
+            <h3 class="card-title">Active Integrations</h3>
+            <div class="integration-list">
+              <div *ngFor="let platform of platformStatus" class="integration-item">
+                <div class="integration-info">
+                  <div class="integration-icon">
+                    <iconify-icon [icon]="platform.icon" style="font-size: 18px"></iconify-icon>
+                  </div>
+                  <span class="integration-name">{{ platform.name }}</span>
+                </div>
+                <div class="integration-status" [class.disconnected]="!platform.connected">
+                  <div class="status-dot" [class.disconnected]="!platform.connected"></div>
+                  {{ platform.connected ? 'Connected' : 'Disconnected' }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
 
-  <div class="content grid-layout" *ngIf="activeTab === 'content'">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h3>Content Management</h3>
-      </div>
-      
-      <div class="sub-nav">
-        <button class="sub-nav-btn" [class.active]="contentSubTab === 'calendar'" (click)="contentSubTab = 'calendar'">
-          📅 Content Calendar
-        </button>
-        <button class="sub-nav-btn" [class.active]="contentSubTab === 'library'" (click)="contentSubTab = 'library'">
-          📚 Content Library
-        </button>
-        <button class="sub-nav-btn" [class.active]="contentSubTab === 'drafts'" (click)="contentSubTab = 'drafts'">
-          📝 Draft Manager
-        </button>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <!-- Content Calendar -->
-      <div *ngIf="contentSubTab === 'calendar'">
-        <h2>📅 Content Calendar</h2>
-        <div class="view-toggle">
-          <button class="toggle-btn" [class.active]="calendarView === 'monthly'" (click)="calendarView = 'monthly'">Monthly View</button>
-          <button class="toggle-btn" [class.active]="calendarView === 'weekly'" (click)="calendarView = 'weekly'">Weekly View</button>
-        </div>
-        <div class="calendar-placeholder">
-          <p>Calendar view with drag & drop rescheduling</p>
-          <p>Status: Draft / Scheduled / Posted</p>
-        </div>
-      </div>
-
-      <!-- Content Library -->
-      <div *ngIf="contentSubTab === 'library'">
-        <h2>📚 Content Library</h2>
-        <div class="library-sections">
-          <div class="library-card">📄 Saved Posts</div>
-          <div class="library-card">🤖 AI Generated Posts</div>
-          <div class="library-card">🖼️ Uploaded Media</div>
-          <div class="library-card">#️⃣ Hashtag Collections</div>
-        </div>
-      </div>
-
-      <!-- Draft Manager -->
-      <div *ngIf="contentSubTab === 'drafts'">
-        <h2>📝 Draft Manager</h2>
-        <div class="draft-actions">
-          <button class="action-btn">✏️ Edit Caption</button>
-          <button class="action-btn">#️⃣ Edit Hashtags</button>
-          <button class="action-btn">🔄 Regenerate with AI</button>
-          <button class="action-btn">👁️ Preview Post</button>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <div class="content" *ngIf="activeTab === 'ai'">
-    <div class="ai-sections">
+    <!-- Content Generator View -->
+    <div *ngIf="activeTab === 'content'" class="ai-sections">
       <div class="ai-card">
         <h3>🤖 AI Content Generator</h3>
         <div class="ai-options">
@@ -177,28 +272,25 @@
             <option>LINKEDIN</option>
             <option>WHATSAPP</option>
           </select>
-          <button class="action-btn" (click)="generateAIContent()">✨ Generate Content</button>
+          <button class="btn btn-primary" (click)="generateAIContent()">✨ Generate Content</button>
         </div>
       </div>
 
       <div class="ai-card">
         <h3>🎨 AI Image Generator</h3>
         <div class="ai-options">
-          <button class="option-btn" (click)="testBackend()">🔍 Test Backend Connection</button>
-          <textarea 
-            class="ai-input" 
-            rows="3" 
-            placeholder="Enter detailed image prompt (e.g., 'A modern coffee shop interior with warm lighting and cozy atmosphere')" 
+          <textarea class="ai-input" rows="3"
+            placeholder="Enter detailed image prompt (e.g., 'A modern coffee shop interior with warm lighting and cozy atmosphere')"
             [(ngModel)]="imagePrompt"></textarea>
-          <button class="action-btn" (click)="generateAIImage()" [disabled]="isGeneratingImage">
+          <button class="btn btn-primary" (click)="generateAIImage()" [disabled]="isGeneratingImage">
             {{ isGeneratingImage ? '⏳ Generating...' : '✨ Generate Image' }}
           </button>
           <div *ngIf="generatedImage" class="generated-image-container">
             <h4>Generated Image:</h4>
-            <img [src]="generatedImage" [alt]="imagePrompt" class="generated-image" (error)="onImageError($event)" (load)="onImageLoad()">
+            <img [src]="generatedImage" [alt]="imagePrompt" class="generated-image" (error)="onImageError($event)">
             <p class="image-prompt">Prompt: "{{ imagePrompt }}"</p>
             <div class="image-actions">
-              <button class="option-btn" (click)="downloadImage()">💾 Download Image</button>
+              <button class="option-btn" (click)="downloadImage()">💾 Download</button>
               <button class="option-btn" (click)="saveToLibrary()">📚 Save to Library</button>
               <button class="option-btn" (click)="copyImageUrl()">🔗 Copy URL</button>
             </div>
@@ -214,80 +306,110 @@
           <div class="insight-item">💡 Suggested: {{ aiInsights.suggestedCampaigns?.join(', ') }}</div>
           <div class="insight-item">🔥 Trending: {{ aiInsights.trendingTopics?.join(' ') }}</div>
         </div>
-        <button class="action-btn" (click)="loadAIInsights()">🔄 Refresh Insights</button>
+        <button class="btn btn-secondary" style="margin-top: 20px; width: 100%;" (click)="loadAIInsights()">🔄 Refresh
+          Insights</button>
       </div>
     </div>
-  </div>
 
-  <div class="content" *ngIf="activeTab === 'analytics'">
-    <div class="analytics-sections">
+    <!-- Analytics View -->
+    <div *ngIf="activeTab === 'analytics'" class="analytics-sections">
       <div class="analytics-card">
         <h3>📈 Engagement Analytics</h3>
-        <div class="analytics-items">
-          <div class="analytics-item">📊 Reach Graph</div>
-          <div class="analytics-item">❤️ Likes & Comments</div>
-          <div class="analytics-item">🔗 Click-Through Rate</div>
-          <div class="analytics-item">📈 Engagement Trend (Weekly)</div>
+        <div class="analytics-items" *ngIf="engagementAnalytics">
+          <div class="analytics-item">
+            <span class="item-label">📊 Peak Reach</span>
+            <span class="item-value">{{ engagementAnalytics.reachGraph[engagementAnalytics.reachGraph.length - 1] |
+              number }}</span>
+          </div>
+          <div class="analytics-item">
+            <span class="item-label">❤️ Total Likes</span>
+            <span class="item-value">{{ engagementAnalytics.totalLikes | number }}</span>
+          </div>
+          <div class="analytics-item">
+            <span class="item-label">💬 Comments</span>
+            <span class="item-value">{{ engagementAnalytics.totalComments | number }}</span>
+          </div>
+          <div class="analytics-item">
+            <span class="item-label">🔗 Avg. CTR</span>
+            <span class="item-value">{{ engagementAnalytics.clickThroughRate }}%</span>
+          </div>
         </div>
       </div>
 
       <div class="analytics-card">
         <h3>⚖️ Platform Comparison</h3>
-        <div class="analytics-items">
-          <div class="analytics-item">📷 Instagram vs Facebook</div>
-          <div class="analytics-item">📊 Content Type Performance</div>
-          <div class="analytics-item">👥 Audience Growth</div>
-        </div>
-      </div>
-
-      <div class="analytics-card">
-        <h3>🎯 Campaign Performance</h3>
-        <div class="analytics-items">
-          <div class="analytics-item">📊 Active Campaign Metrics</div>
-          <div class="analytics-item">💰 ROI Estimation</div>
-          <div class="analytics-item">🎯 Conversion Rate</div>
+        <div class="analytics-items" *ngIf="platformComparison">
+          <div class="platform-stats" *ngFor="let platform of ['instagram', 'facebook']">
+            <h4 style="margin: 10px 0 5px 0; font-size: 14px; text-transform: capitalize;">{{ platform }}</h4>
+            <div class="analytics-item">
+              <span class="item-label">Posts:</span> {{ platformComparison.platforms[platform]?.posts }}
+            </div>
+            <div class="analytics-item">
+              <span class="item-label">Reach:</span> {{ platformComparison.platforms[platform]?.reach | number }}
+            </div>
+          </div>
+          <div class="analytics-item" style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px;">
+            <span class="item-label">📈 Top Content:</span> Images ({{ platformComparison.contentTypePerformance.images
+            }}%)
+          </div>
         </div>
       </div>
 
       <div class="analytics-card">
         <h3>📄 Reports</h3>
+        <div class="report-info" *ngIf="monthlyReport" style="margin-bottom: 20px;">
+          <p><strong>Current Report:</strong> {{ monthlyReport.month }}</p>
+          <p>Reach for this month showed a {{ (monthlyReport.totalReach / 100000) * 10 | number:'1.0-1' }}% increase.
+          </p>
+        </div>
         <div class="report-actions">
-          <button class="action-btn">📥 Download Monthly Report</button>
-          <button class="action-btn">📊 Export CSV</button>
-          <button class="action-btn">📤 Share PDF</button>
+          <button class="btn btn-secondary" (click)="downloadImage()">📥 Download Monthly Report</button>
+          <button class="btn btn-secondary">📊 Export CSV</button>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="content" *ngIf="activeTab === 'settings'">
-    <div class="tab-content">
-      <h2>⚙️ Settings</h2>
-      <p>Configure your account and business settings</p>
+    <!-- Calendar PlaceHolder -->
+    <div *ngIf="activeTab === 'calendar'" class="card">
+      <h3 class="card-title">📅 Content Calendar</h3>
+      <p>Calendar view with drag & drop rescheduling is coming soon.</p>
     </div>
-  </div>
 
-  <div class="modal" *ngIf="showCreateCampaign" (click)="showCreateCampaign = false">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Create New Campaign</h2>
-      <form (ngSubmit)="createCampaign()">
-        <div class="form-group">
-          <label>Campaign Name</label>
-          <input type="text" [(ngModel)]="newCampaign.name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label>Start Date</label>
-          <input type="date" [(ngModel)]="newCampaign.startDate" name="startDate" required>
-        </div>
-        <div class="form-group">
-          <label>End Date</label>
-          <input type="date" [(ngModel)]="newCampaign.endDate" name="endDate" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn-secondary" (click)="showCreateCampaign = false">Cancel</button>
-          <button type="submit" class="btn-primary">Create Campaign</button>
-        </div>
-      </form>
+    <!-- Other PlaceHolders -->
+    <div *ngIf="activeTab === 'integrations'" class="card">
+      <h3 class="card-title">🧩 Integrations</h3>
+      <p>Manage your social media connections here.</p>
     </div>
+
+    <div *ngIf="activeTab === 'settings'" class="card">
+      <h3 class="card-title">⚙️ Settings</h3>
+      <p>Configure your account and business settings.</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- Create Campaign Modal -->
+<div class="modal" *ngIf="showCreateCampaign" (click)="showCreateCampaign = false">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Create New Campaign</h2>
+    <form (ngSubmit)="createCampaign()">
+      <div class="form-group">
+        <label>Campaign Name</label>
+        <input type="text" [(ngModel)]="newCampaign.name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" [(ngModel)]="newCampaign.startDate" name="startDate" required>
+      </div>
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" [(ngModel)]="newCampaign.endDate" name="endDate" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="showCreateCampaign = false">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Campaign</button>
+      </div>
+    </form>
   </div>
 </div>
