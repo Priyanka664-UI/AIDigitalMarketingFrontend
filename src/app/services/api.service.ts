@@ -140,4 +140,13 @@ export class ApiService {
   exportCSV(businessId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/analytics/export/csv?businessId=${businessId}`);
   }
+
+  // Calendar APIs
+  getCalendarPosts(businessId: number, year: number, month: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/calendar/posts?businessId=${businessId}&year=${year}&month=${month}`);
+  }
+
+  getCalendarSummary(businessId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/calendar/summary?businessId=${businessId}`);
+  }
 }

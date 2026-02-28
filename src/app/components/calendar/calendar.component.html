@@ -1,0 +1,49 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="previousMonth()">
+      <iconify-icon icon="lucide:chevron-left"></iconify-icon>
+    </button>
+    <h2 class="calendar-title">{{ currentMonthName }} {{ currentYear }}</h2>
+    <button class="nav-btn" (click)="nextMonth()">
+      <iconify-icon icon="lucide:chevron-right"></iconify-icon>
+    </button>
+  </div>
+
+  <div class="calendar-summary">
+    <div class="summary-item">
+      <span class="summary-label">This Week</span>
+      <span class="summary-value">{{ summary?.scheduledThisWeek || 0 }}</span>
+    </div>
+    <div class="summary-item">
+      <span class="summary-label">This Month</span>
+      <span class="summary-value">{{ summary?.scheduledThisMonth || 0 }}</span>
+    </div>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="calendar-weekday" *ngFor="let day of weekDays">{{ day }}</div>
+    
+    <div *ngFor="let day of calendarDays" 
+         class="calendar-day" 
+         [class.other-month]="!day.isCurrentMonth"
+         [class.today]="day.isToday"
+         [class.has-posts]="day.posts.length > 0">
+      <div class="day-number">{{ day.date }}</div>
+      <div class="day-posts">
+        <div *ngFor="let post of day.posts.slice(0, 3)" 
+             class="post-indicator"
+             [class.instagram]="post.platform === 'INSTAGRAM'"
+             [class.facebook]="post.platform === 'FACEBOOK'"
+             [class.linkedin]="post.platform === 'LINKEDIN'"
+             [class.whatsapp]="post.platform === 'WHATSAPP'"
+             [title]="post.caption">
+          <iconify-icon [icon]="getPlatformIcon(post.platform)"></iconify-icon>
+          <span class="post-time">{{ formatTime(post.scheduledTime) }}</span>
+        </div>
+        <div *ngIf="day.posts.length > 3" class="more-posts">
+          +{{ day.posts.length - 3 }} more
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

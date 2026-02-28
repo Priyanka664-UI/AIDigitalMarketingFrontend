@@ -369,10 +369,9 @@
       </div>
     </div>
 
-    <!-- Calendar PlaceHolder -->
-    <div *ngIf="activeTab === 'calendar'" class="card">
-      <h3 class="card-title">📅 Content Calendar</h3>
-      <p>Calendar view with drag & drop rescheduling is coming soon.</p>
+    <!-- Calendar View -->
+    <div *ngIf="activeTab === 'calendar'">
+      <app-calendar></app-calendar>
     </div>
 
     <!-- Other PlaceHolders -->
