@@ -169,24 +169,6 @@
         </div>
       </div>
 
-      <!-- AI Quick Generate Banner -->
-      <div class="generate-banner">
-        <h2 class="generate-title">Create your next viral post</h2>
-        <p class="generate-subtitle">Describe your topic, select platforms, and let AI do the heavy lifting.</p>
-        <div class="generate-input-group">
-          <div style="padding-left: 8px; display: flex; align-items: center;">
-            <iconify-icon icon="lucide:sparkles"
-              style="font-size: 20px; color: rgba(255, 255, 255, 0.7)"></iconify-icon>
-          </div>
-          <input type="text" class="generate-input" placeholder="E.g., A post about our new summer coffee blend..."
-            [(ngModel)]="imagePrompt" />
-          <button class="generate-btn" (click)="generateAIContent()">
-            Generate
-            <iconify-icon icon="lucide:arrow-right" style="font-size: 16px"></iconify-icon>
-          </button>
-        </div>
-      </div>
-
       <!-- Audience Reach Chart - Full Width -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
@@ -493,13 +475,40 @@
       <div class="analytics-card">
         <h3>⚖️ Platform Comparison</h3>
         <div class="analytics-items" *ngIf="platformComparison">
-          <div class="platform-stats" *ngFor="let platform of ['instagram', 'facebook']">
-            <h4 style="margin: 10px 0 5px 0; font-size: 14px; text-transform: capitalize;">{{ platform }}</h4>
+          <div class="platform-stats" *ngIf="selectedPlatform === 'all' || selectedPlatform === 'INSTAGRAM'">
+            <h4 style="margin: 10px 0 5px 0; font-size: 14px; text-transform: capitalize;">instagram</h4>
             <div class="analytics-item">
-              <span class="item-label">Posts:</span> {{ platformComparison.platforms[platform]?.posts }}
+              <span class="item-label">Posts:</span> {{ platformComparison.platforms['instagram']?.posts }}
             </div>
             <div class="analytics-item">
-              <span class="item-label">Reach:</span> {{ platformComparison.platforms[platform]?.reach | number }}
+              <span class="item-label">Reach:</span> {{ platformComparison.platforms['instagram']?.reach | number }}
+            </div>
+          </div>
+          <div class="platform-stats" *ngIf="selectedPlatform === 'all' || selectedPlatform === 'FACEBOOK'">
+            <h4 style="margin: 10px 0 5px 0; font-size: 14px; text-transform: capitalize;">facebook</h4>
+            <div class="analytics-item">
+              <span class="item-label">Posts:</span> {{ platformComparison.platforms['facebook']?.posts }}
+            </div>
+            <div class="analytics-item">
+              <span class="item-label">Reach:</span> {{ platformComparison.platforms['facebook']?.reach | number }}
+            </div>
+          </div>
+          <div class="platform-stats" *ngIf="selectedPlatform === 'all' || selectedPlatform === 'LINKEDIN'">
+            <h4 style="margin: 10px 0 5px 0; font-size: 14px; text-transform: capitalize;">linkedin</h4>
+            <div class="analytics-item">
+              <span class="item-label">Posts:</span> {{ platformComparison.platforms['linkedin']?.posts }}
+            </div>
+            <div class="analytics-item">
+              <span class="item-label">Reach:</span> {{ platformComparison.platforms['linkedin']?.reach | number }}
+            </div>
+          </div>
+          <div class="platform-stats" *ngIf="selectedPlatform === 'all' || selectedPlatform === 'WHATSAPP'">
+            <h4 style="margin: 10px 0 5px 0; font-size: 14px; text-transform: capitalize;">whatsapp</h4>
+            <div class="analytics-item">
+              <span class="item-label">Posts:</span> {{ platformComparison.platforms['whatsapp']?.posts }}
+            </div>
+            <div class="analytics-item">
+              <span class="item-label">Reach:</span> {{ platformComparison.platforms['whatsapp']?.reach | number }}
             </div>
           </div>
           <div class="analytics-item" style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px;">

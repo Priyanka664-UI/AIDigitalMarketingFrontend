@@ -10,7 +10,7 @@
 
 .btn-back {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -62,7 +62,7 @@
 }
 
 .settings-nav-btn.active {
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
 }
 
@@ -106,7 +106,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  background: linear-gradient(90deg, #4a4a4a, #6b7280);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -121,7 +121,7 @@
 }
 
 .business-card::before {
-  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  background: linear-gradient(90deg, #4a4a4a, #6b7280);
 }
 
 .card-header {
@@ -139,15 +139,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
   border-radius: 12px;
-  color: #2563eb;
+  color: #4a4a4a;
   font-size: 24px;
 }
 
 .business-card .card-header iconify-icon {
-  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-  color: #8b5cf6;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+  color: #6b7280;
 }
 
 .card-header h3 {
@@ -161,7 +161,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(74, 74, 74, 0.05) 0%, rgba(107, 114, 128, 0.05) 100%);
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 20px;
@@ -209,7 +209,7 @@
 
 .form-control:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #4a4a4a;
 }
 
 .checkbox-group {
@@ -244,8 +244,8 @@
 }
 
 .platform-connect-item:hover {
-  border-color: #2563eb;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+  border-color: #4a4a4a;
+  box-shadow: 0 4px 15px rgba(74, 74, 74, 0.1);
 }
 
 .platform-connect-item .platform-info {
@@ -271,7 +271,7 @@
 
 .btn-connect {
   padding: 10px 24px;
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -282,7 +282,7 @@
 
 .btn-connect:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 15px rgba(74, 74, 74, 0.2);
 }
 
 .toggle-switch {
@@ -304,7 +304,7 @@
 }
 
 .current-plan {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(74, 74, 74, 0.08) 0%, rgba(107, 114, 128, 0.08) 100%);
   padding: 20px;
   border-radius: 12px;
   margin-bottom: 30px;
@@ -316,7 +316,7 @@
 }
 
 .plan-badge {
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   padding: 4px 12px;
   border-radius: 6px;
@@ -345,8 +345,8 @@
 }
 
 .pricing-card.featured {
-  border-color: #2563eb;
-  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.2);
+  border-color: #4a4a4a;
+  box-shadow: 0 8px 30px rgba(74, 74, 74, 0.2);
   transform: scale(1.05);
 }
 
@@ -359,7 +359,10 @@
 .price {
   font-size: 36px;
   font-weight: bold;
-  color: #2563eb;
+  background: linear-gradient(135deg, #4a4a4a, #6b7280);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 20px;
 }
 
@@ -384,7 +387,7 @@
 .btn-upgrade {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -395,7 +398,7 @@
 
 .btn-upgrade:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 15px rgba(74, 74, 74, 0.2);
 }
 
 .billing-info {
@@ -425,8 +428,8 @@
 }
 
 .info-card {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
-  border-left: 4px solid #2563eb;
+  background: linear-gradient(135deg, rgba(74, 74, 74, 0.05) 0%, rgba(107, 114, 128, 0.05) 100%);
+  border-left: 4px solid #4a4a4a;
   padding: 15px 20px;
   border-radius: 8px;
   margin-bottom: 25px;
@@ -436,8 +439,8 @@
 }
 
 .info-card.success {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
-  border-left-color: #22c55e;
+  background: linear-gradient(135deg, rgba(74, 74, 74, 0.05) 0%, rgba(107, 114, 128, 0.05) 100%);
+  border-left-color: #333333;
 }
 
 .info-icon {
@@ -471,13 +474,13 @@
 
 .platform-features {
   display: block;
-  color: #2563eb;
+  color: #4a4a4a;
   font-size: 12px;
   margin-top: 5px;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   border: none;
   padding: 14px 28px;
@@ -486,12 +489,12 @@
   font-weight: 600;
   font-size: 15px;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 15px rgba(74, 74, 74, 0.2);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 20px rgba(74, 74, 74, 0.3);
 }
 
 .btn-secondary {
@@ -519,9 +522,8 @@
   }
 }
 
-
 .account-info-card {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(74, 74, 74, 0.05) 0%, rgba(107, 114, 128, 0.05) 100%);
   border: 2px solid #e0e0e0;
   border-radius: 12px;
   padding: 25px;
@@ -563,7 +565,7 @@
 }
 
 .badge-role {
-  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   padding: 4px 12px;
   border-radius: 6px;
@@ -586,7 +588,6 @@
   background-color: #f5f7fa;
   cursor: not-allowed;
 }
-
 
 .subsection {
   background: #f8f9fa;
@@ -615,13 +616,13 @@
 }
 
 .platform-connect-item.connected {
-  border-color: #22c55e;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-color: #4a4a4a;
+  background: linear-gradient(135deg, rgba(74, 74, 74, 0.05) 0%, rgba(107, 114, 128, 0.05) 100%);
 }
 
 .btn-disconnect {
   padding: 10px 24px;
-  background: #22c55e;
+  background: #4a4a4a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -631,7 +632,7 @@
 }
 
 .btn-disconnect:hover {
-  background: #16a34a;
+  background: #333333;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 4px 15px rgba(74, 74, 74, 0.2);
 }

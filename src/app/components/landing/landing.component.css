@@ -66,8 +66,8 @@
     align-items: center;
     padding: 6px 14px;
     border-radius: var(--radius-xl);
-    background-color: var(--secondary);
-    color: var(--primary);
+    background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+    color: #404040;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 24px;
@@ -100,7 +100,7 @@
 .nav-brand-icon {
     width: 32px;
     height: 32px;
-    background: var(--primary);
+    background: linear-gradient(135deg, #4a4a4a, #6b7280);
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
@@ -121,7 +121,7 @@
 }
 
 .nav-link:hover {
-    color: var(--primary);
+    color: #4a4a4a;
 }
 
 .nav-actions {
@@ -224,13 +224,13 @@
 .feature-icon {
     width: 48px;
     height: 48px;
-    background: var(--secondary);
+    background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 24px;
-    color: var(--primary);
+    color: #4a4a4a;
 }
 
 .feature-title {
@@ -261,7 +261,7 @@
 .step-number {
     width: 64px;
     height: 64px;
-    background: var(--primary);
+    background: linear-gradient(135deg, #4a4a4a, #6b7280);
     color: var(--primary-foreground);
     border-radius: 50%;
     display: flex;
@@ -310,8 +310,8 @@
 }
 
 .pricing-card.popular {
-    border: 2px solid var(--primary);
-    box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.1);
+    border: 2px solid #4a4a4a;
+    box-shadow: 0 20px 40px -10px rgba(74, 74, 74, 0.2);
     position: relative;
 }
 
@@ -320,7 +320,7 @@
     top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--primary);
+    background: linear-gradient(135deg, #4a4a4a, #6b7280);
     color: var(--primary-foreground);
     padding: 4px 16px;
     border-radius: var(--radius-xl);
@@ -338,6 +338,10 @@
     font-size: 48px;
     font-weight: 700;
     margin-bottom: 8px;
+    background: linear-gradient(135deg, #4a4a4a, #6b7280);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .pricing-period {

@@ -66,7 +66,7 @@
 }
 
 .brand-icon {
-  color: var(--primary-color);
+  color: #4a4a4a;
 }
 
 .brand-name {
@@ -162,9 +162,9 @@ input {
 
 input:focus {
   outline: none;
-  border-color: var(--input-focus);
+  border-color: #4a4a4a;
   background-color: #ffffff;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 4px rgba(74, 74, 74, 0.1);
 }
 
 input.invalid {
@@ -192,7 +192,7 @@ input.invalid {
 }
 
 .eye-icon:hover {
-  color: var(--primary-color);
+  color: #4a4a4a;
 }
 
 .btn-primary {
@@ -201,7 +201,7 @@ input.invalid {
   justify-content: center;
   gap: 8px;
   width: 100%;
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, #4a4a4a, #6b7280);
   color: white;
   border: none;
   border-radius: 12px;
@@ -215,7 +215,7 @@ input.invalid {
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--primary-hover);
+  filter: brightness(1.1);
   transform: translateY(-1px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
@@ -252,7 +252,7 @@ input.invalid {
 }
 
 .auth-footer a {
-  color: var(--primary-color);
+  color: #4a4a4a;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -260,7 +260,7 @@ input.invalid {
 }
 
 .auth-footer a:hover {
-  color: var(--primary-hover);
+  color: #333333;
   text-decoration: underline;
 }
 

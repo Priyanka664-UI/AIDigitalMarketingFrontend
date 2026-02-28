@@ -32,8 +32,8 @@
 }
 
 .tabs button.active {
-  border-bottom-color: #007bff;
-  color: #007bff;
+  border-bottom-color: #4a4a4a;
+  color: #4a4a4a;
   font-weight: bold;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4a4a4a 0%, #6b7280 100%);
   color: white;
   padding: 12px 30px;
   border: none;
@@ -92,7 +92,7 @@
 
 .btn-small {
   padding: 6px 12px;
-  background: #007bff;
+  background: #4a4a4a;
   color: white;
   border: none;
   border-radius: 4px;
@@ -141,8 +141,8 @@
 }
 
 .tag {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #f0f0f0;
+  color: #404040;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -158,12 +158,12 @@
   background: #f8f9fa;
   padding: 15px;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #4a4a4a;
 }
 
 .calendar-item h4 {
   margin-bottom: 10px;
-  color: #667eea;
+  color: #4a4a4a;
 }
 
 .creative-preview {
@@ -201,7 +201,7 @@
 }
 
 .platform-badge {
-  background: #007bff;
+  background: #4a4a4a;
   color: white;
   padding: 4px 12px;
   border-radius: 12px;
@@ -209,7 +209,7 @@
 }
 
 .status-badge {
-  background: #28a745;
+  background: #333333;
   color: white;
   padding: 4px 12px;
   border-radius: 12px;
@@ -222,7 +222,7 @@
 }
 
 .post-hashtags {
-  color: #1976d2;
+  color: #4a4a4a;
   font-size: 0.9rem;
 }
 
