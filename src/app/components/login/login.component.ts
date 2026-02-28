@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   formData = {
-    contact: '',
+    email: '',
     password: ''
   };
 

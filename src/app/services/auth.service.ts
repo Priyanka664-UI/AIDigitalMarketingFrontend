@@ -13,7 +13,7 @@ export interface SignupRequest {
 }
 
 export interface LoginRequest {
-  contact: string;
+  email: string;
   password: string;
 }
 

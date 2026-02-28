@@ -26,11 +26,11 @@
 
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
       <div class="form-group">
-        <label for="contact">Email or Mobile</label>
+        <label for="email">Email</label>
         <div class="input-wrapper">
-          <input type="text" id="contact" [(ngModel)]="formData.contact" name="contact"
-            placeholder="email@example.com or mobile" required #contact="ngModel"
-            [class.invalid]="contact.invalid && contact.touched">
+          <input type="email" id="email" [(ngModel)]="formData.email" name="email"
+            placeholder="email@example.com" required #email="ngModel"
+            [class.invalid]="email.invalid && email.touched">
         </div>
       </div>
 

@@ -45,7 +45,7 @@ export interface PostScheduleRequest {
   providedIn: 'root'
 })
 export class ContentManagementService {
-  private baseUrl = 'http://192.168.0.102:8081/api/content';
+  private baseUrl = 'http://192.168.0.107:8084/api/content';
 
   constructor(private http: HttpClient) {}
 
