@@ -15,17 +15,11 @@
         </div>
         Dashboard
       </button>
-<<<<<<< HEAD
       <button class="nav-item" [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">
         <div class="icon-container">
           <iconify-icon icon="lucide:sparkles" style="font-size: 18px"></iconify-icon>
         </div>
         Content Generator
-=======
-      <button class="nav-btn" [class.active]="activeTab === 'content'" routerLink="/content-management">
-        <span class="icon">📝</span>
-        <span>Content Manager</span>
->>>>>>> ddf7a41105bd73a8b47b15a2744f2d421b3f4882
       </button>
       <button class="nav-item" (click)="activeTab = 'calendar'">
         <div class="icon-container">
@@ -257,113 +251,35 @@
       </div>
     </div>
 
-<<<<<<< HEAD
-    <!-- Content Generator View -->
+    <!-- Content Generator / AI View -->
     <div *ngIf="activeTab === 'content'" class="ai-sections">
-      <div class="ai-card">
-        <h3>🤖 AI Content Generator</h3>
-        <div class="ai-options">
-          <select class="ai-select" [(ngModel)]="aiContentConfig.days">
-            <option [value]="7">Generate 7 Day Calendar</option>
-            <option [value]="30">Generate 30 Day Calendar</option>
-          </select>
-          <select class="ai-select" [(ngModel)]="aiContentConfig.tone">
-            <option>Professional</option>
-            <option>Friendly</option>
-            <option>Luxury</option>
-            <option>Casual</option>
-          </select>
-          <select class="ai-select" [(ngModel)]="aiContentConfig.platform">
-            <option>INSTAGRAM</option>
-            <option>FACEBOOK</option>
-            <option>LINKEDIN</option>
-            <option>WHATSAPP</option>
-          </select>
-          <button class="btn btn-primary" (click)="generateAIContent()">✨ Generate Content</button>
-=======
-  <div class="content grid-layout" *ngIf="activeTab === 'content'">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h3>Content Management</h3>
-      </div>
-      
-      <div class="sub-nav">
-        <button class="sub-nav-btn" [class.active]="contentSubTab === 'calendar'" (click)="contentSubTab = 'calendar'">
-          📅 Content Calendar
-        </button>
-        <button class="sub-nav-btn" [class.active]="contentSubTab === 'library'" (click)="contentSubTab = 'library'">
-          📚 Content Library
-        </button>
-        <button class="sub-nav-btn" [class.active]="contentSubTab === 'drafts'" (click)="contentSubTab = 'drafts'">
-          📝 Draft Manager
-        </button>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <!-- Content Calendar -->
-      <div *ngIf="contentSubTab === 'calendar'">
-        <h2>📅 Content Calendar</h2>
-        <div class="view-toggle">
-          <button class="toggle-btn" [class.active]="calendarView === 'monthly'" (click)="calendarView = 'monthly'">Monthly View</button>
-          <button class="toggle-btn" [class.active]="calendarView === 'weekly'" (click)="calendarView = 'weekly'">Weekly View</button>
-        </div>
-        <div class="calendar-placeholder">
-          <p>Calendar view with drag & drop rescheduling</p>
-          <p>Status: Draft / Scheduled / Posted</p>
-        </div>
-      </div>
-
-      <!-- Content Library -->
-      <div *ngIf="contentSubTab === 'library'">
-        <h2>📚 Content Library</h2>
-        <div class="library-sections">
-          <div class="library-card">📄 Saved Posts</div>
-          <div class="library-card">🤖 AI Generated Posts</div>
-          <div class="library-card">🖼️ Uploaded Media</div>
-          <div class="library-card">#️⃣ Hashtag Collections</div>
-        </div>
-      </div>
-
-      <!-- Draft Manager -->
-      <div *ngIf="contentSubTab === 'drafts'">
-        <h2>📝 Draft Manager</h2>
-        <div class="draft-actions">
-          <button class="action-btn">✏️ Edit Caption</button>
-          <button class="action-btn">#️⃣ Edit Hashtags</button>
-          <button class="action-btn">🔄 Regenerate with AI</button>
-          <button class="action-btn">👁️ Preview Post</button>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <div class="content" *ngIf="activeTab === 'ai'">
-    <div class="ai-sections">
-      <!-- AI Content Generator -->
+      <!-- AI Content Form -->
       <div class="ai-card">
         <h3>🧠 AI Content Generator</h3>
         <form class="ai-form">
           <div class="form-group">
             <label>Product Name</label>
-            <input type="text" [(ngModel)]="contentRequest.productName" name="productName" [ngModelOptions]="{standalone: true}" placeholder="Enter product/service name">
+            <input type="text" [(ngModel)]="contentRequest.productName" name="productName"
+              placeholder="Enter product/service name">
           </div>
           <div class="form-group">
             <label>Target Audience</label>
-            <input type="text" [(ngModel)]="contentRequest.targetAudience" name="targetAudience" [ngModelOptions]="{standalone: true}" placeholder="e.g., Young professionals, 25-35">
+            <input type="text" [(ngModel)]="contentRequest.targetAudience" name="targetAudience"
+              placeholder="e.g., Young professionals">
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Tone</label>
-              <select [(ngModel)]="contentRequest.tone" name="tone" [ngModelOptions]="{standalone: true}">
+              <select [(ngModel)]="contentRequest.tone" name="tone">
                 <option value="PROFESSIONAL">Professional</option>
                 <option value="FRIENDLY">Friendly</option>
-                <option value="FUNNY">Funny</option>
+                <option value="LUXURY">Luxury</option>
+                <option value="CASUAL">Casual</option>
               </select>
             </div>
             <div class="form-group">
               <label>Goal</label>
-              <select [(ngModel)]="contentRequest.goal" name="goal" [ngModelOptions]="{standalone: true}">
+              <select [(ngModel)]="contentRequest.goal" name="goal">
                 <option value="SALES">Sales</option>
                 <option value="AWARENESS">Awareness</option>
                 <option value="ENGAGEMENT">Engagement</option>
@@ -371,7 +287,7 @@
             </div>
             <div class="form-group">
               <label>Platform</label>
-              <select [(ngModel)]="contentRequest.platform" name="platform" [ngModelOptions]="{standalone: true}">
+              <select [(ngModel)]="contentRequest.platform" name="platform">
                 <option value="INSTAGRAM">Instagram</option>
                 <option value="FACEBOOK">Facebook</option>
                 <option value="LINKEDIN">LinkedIn</option>
@@ -379,41 +295,31 @@
               </select>
             </div>
           </div>
-          <button type="button" class="action-btn" (click)="generateAIContentForm()" [disabled]="loading">
+          <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;"
+            (click)="generateAIContentForm()" [disabled]="loading">
             {{ loading ? '⏳ Generating...' : '✨ Generate Content' }}
           </button>
         </form>
-        
-        <div *ngIf="generatedContent" class="results" style="margin-top: 20px;">
-          <div class="result-section" style="margin-bottom: 20px;">
+
+        <div *ngIf="generatedContent" class="results" style="margin-top: 24px;">
+          <div *ngIf="generatedContent.captions" class="result-section">
             <h4>📝 Captions</h4>
-            <div *ngFor="let caption of generatedContent.captions" style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 10px;">
+            <div *ngFor="let caption of generatedContent.captions" class="result-item"
+              style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 10px;">
               <p>{{ caption }}</p>
-              <button class="option-btn" (click)="useCaption(caption)">Use This</button>
+              <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 12px"
+                (click)="useCaption(caption)">Use This</button>
             </div>
           </div>
-          <div class="result-section" style="margin-bottom: 20px;">
+          <div *ngIf="generatedContent.hashtags" class="result-section">
             <h4>#️⃣ Hashtags</h4>
-            <div style="padding: 10px; background: #f5f7fa; border-radius: 8px;">
-              <span *ngFor="let tag of generatedContent.hashtags" style="margin-right: 8px; color: #2563eb;">{{ tag }}</span>
+            <div class="hashtag-cloud" style="padding: 10px; background: #f5f7fa; border-radius: 8px;">
+              <span *ngFor="let tag of generatedContent.hashtags" class="hashtag"
+                style="margin-right: 8px; color: #2563eb;">{{ tag }}</span>
             </div>
-            <button class="option-btn" (click)="useHashtags(generatedContent.hashtags)" style="margin-top: 10px;">Use All</button>
+            <button class="btn btn-secondary" style="margin-top: 8px"
+              (click)="useHashtags(generatedContent.hashtags)">Use All</button>
           </div>
-          <div class="result-section" *ngIf="generatedContent.postIdeas">
-            <h4>💡 Post Ideas</h4>
-            <ul style="padding-left: 20px;">
-              <li *ngFor="let idea of generatedContent.postIdeas" style="margin-bottom: 8px;">{{ idea }}</li>
-            </ul>
-          </div>
-          <div class="result-section" *ngIf="generatedContent.contentCalendar">
-            <h4>📅 Content Calendar</h4>
-            <div *ngFor="let item of generatedContent.contentCalendar" style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 10px;">
-              <strong>{{ item.day }} - {{ item.postType }}</strong>
-              <p>{{ item.caption }}</p>
-              <small>{{ item.hashtags }}</small>
-            </div>
-          </div>
->>>>>>> ddf7a41105bd73a8b47b15a2744f2d421b3f4882
         </div>
       </div>
 
@@ -423,7 +329,7 @@
         <form class="ai-form">
           <div class="form-group">
             <label>Design Type</label>
-            <select [(ngModel)]="creativeRequest.designType" name="designType" [ngModelOptions]="{standalone: true}">
+            <select [(ngModel)]="creativeRequest.designType" name="designType">
               <option value="POSTER">Poster</option>
               <option value="CAROUSEL">Carousel</option>
               <option value="AD_BANNER">Ad Banner</option>
@@ -431,20 +337,22 @@
           </div>
           <div class="form-group">
             <label>Product Name</label>
-            <input type="text" [(ngModel)]="creativeRequest.productName" name="productName2" [ngModelOptions]="{standalone: true}" placeholder="Enter product name">
+            <input type="text" [(ngModel)]="creativeRequest.productName" name="creativeProductName"
+              placeholder="Enter product name">
           </div>
           <div class="form-group">
             <label>Tagline</label>
-            <input type="text" [(ngModel)]="creativeRequest.tagline" name="tagline" [ngModelOptions]="{standalone: true}" placeholder="Enter tagline">
+            <input type="text" [(ngModel)]="creativeRequest.tagline" name="tagline" placeholder="Enter tagline">
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Color Scheme</label>
-              <input type="text" [(ngModel)]="creativeRequest.colorScheme" name="colorScheme" [ngModelOptions]="{standalone: true}" placeholder="e.g., Blue & White">
+              <input type="text" [(ngModel)]="creativeRequest.colorScheme" name="colorScheme"
+                placeholder="e.g., Blue & White">
             </div>
             <div class="form-group">
               <label>Style</label>
-              <select [(ngModel)]="creativeRequest.style" name="style" [ngModelOptions]="{standalone: true}">
+              <select [(ngModel)]="creativeRequest.style" name="style">
                 <option value="MODERN">Modern</option>
                 <option value="MINIMAL">Minimal</option>
                 <option value="VIBRANT">Vibrant</option>
@@ -452,50 +360,9 @@
               </select>
             </div>
           </div>
-          <button type="button" class="action-btn" (click)="generateCreativeForm()" [disabled]="loading">
+          <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;"
+            (click)="generateCreativeForm()" [disabled]="loading">
             {{ loading ? '⏳ Generating...' : '🎨 Generate Creative' }}
-          </button>
-        </form>
-      </div>
-
-      <!-- Post Scheduler -->
-      <div class="ai-card">
-        <h3>📅 Post Scheduler</h3>
-        <form class="ai-form">
-          <div class="form-group">
-            <label>Campaign</label>
-            <select [(ngModel)]="scheduleRequest.campaignId" name="campaignId" [ngModelOptions]="{standalone: true}" (change)="loadScheduledPosts()">
-              <option [ngValue]="null">Select Campaign</option>
-              <option *ngFor="let campaign of campaigns" [ngValue]="campaign.id">{{ campaign.name }}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Platform</label>
-            <select [(ngModel)]="scheduleRequest.platform" name="platform2" [ngModelOptions]="{standalone: true}">
-              <option value="INSTAGRAM">Instagram 📷</option>
-              <option value="FACEBOOK">Facebook 👥</option>
-              <option value="LINKEDIN">LinkedIn 💼</option>
-              <option value="WHATSAPP">WhatsApp 💬</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Caption</label>
-            <textarea rows="4" [(ngModel)]="scheduleRequest.caption" name="caption" [ngModelOptions]="{standalone: true}" placeholder="Enter caption"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Hashtags</label>
-            <input type="text" [(ngModel)]="scheduleRequest.hashtags" name="hashtags" [ngModelOptions]="{standalone: true}" placeholder="#example #hashtags">
-          </div>
-          <div class="form-group">
-            <label>Image URL</label>
-            <input type="text" [(ngModel)]="scheduleRequest.imageUrl" name="imageUrl" [ngModelOptions]="{standalone: true}" placeholder="https://...">
-          </div>
-          <div class="form-group">
-            <label>Schedule Date & Time</label>
-            <input type="datetime-local" [(ngModel)]="scheduleRequest.scheduledTime" name="scheduledTime" [ngModelOptions]="{standalone: true}">
-          </div>
-          <button type="button" class="action-btn" (click)="schedulePost()" [disabled]="loading || !scheduleRequest.campaignId">
-            {{ loading ? '⏳ Scheduling...' : '📅 Schedule Post' }}
           </button>
         </form>
       </div>
@@ -504,47 +371,100 @@
       <div class="ai-card">
         <h3>🖼️ AI Image Generator</h3>
         <div class="ai-options">
-<<<<<<< HEAD
           <textarea class="ai-input" rows="3"
-            placeholder="Enter detailed image prompt (e.g., 'A modern coffee shop interior with warm lighting and cozy atmosphere')"
-=======
-          <textarea 
-            class="ai-input" 
-            rows="3" 
-            placeholder="Enter detailed image prompt (e.g., 'A modern coffee shop interior with warm lighting and cozy atmosphere')" 
->>>>>>> ddf7a41105bd73a8b47b15a2744f2d421b3f4882
-            [(ngModel)]="imagePrompt"></textarea>
-          <button class="btn btn-primary" (click)="generateAIImage()" [disabled]="isGeneratingImage">
+            placeholder="Enter detailed image prompt (e.g., 'A modern coffee shop interior...')"
+            [(ngModel)]="imagePrompt" name="imagePrompt"></textarea>
+          <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" (click)="generateAIImage()"
+            [disabled]="isGeneratingImage">
             {{ isGeneratingImage ? '⏳ Generating...' : '✨ Generate Image' }}
           </button>
-          <div *ngIf="generatedImage" class="generated-image-container">
+
+          <div *ngIf="generatedImage" class="generated-image-container" style="margin-top: 20px;">
             <h4>Generated Image:</h4>
-            <img [src]="generatedImage" [alt]="imagePrompt" class="generated-image" (error)="onImageError($event)">
-            <p class="image-prompt">Prompt: "{{ imagePrompt }}"</p>
-            <div class="image-actions">
-              <button class="option-btn" (click)="downloadImage()">💾 Download</button>
-              <button class="option-btn" (click)="saveToLibrary()">📚 Save to Library</button>
-              <button class="option-btn" (click)="copyImageUrl()">🔗 Copy URL</button>
+            <img [src]="generatedImage" [alt]="imagePrompt" class="generated-image"
+              style="width: 100%; border-radius: 8px;" (error)="onImageError($event)">
+            <p class="image-prompt" style="font-size: 12px; color: var(--muted-foreground); margin-top: 8px;">Prompt:
+              "{{ imagePrompt }}"</p>
+            <div class="image-actions" style="display: flex; gap: 8px; margin-top: 12px;">
+              <button class="btn btn-secondary" style="flex: 1; font-size: 12px;" (click)="downloadImage()">📥
+                Download</button>
+              <button class="btn btn-secondary" style="flex: 1; font-size: 12px;" (click)="saveToLibrary()">📚
+                Save</button>
+              <button class="btn btn-secondary" style="flex: 1; font-size: 12px;" (click)="copyImageUrl()">🔗 Copy
+                URL</button>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Post Scheduler -->
+      <div class="ai-card">
+        <h3>📅 Post Scheduler</h3>
+        <form class="ai-form">
+          <div class="form-group">
+            <label>Campaign</label>
+            <select [(ngModel)]="scheduleRequest.campaignId" name="campaignId" (change)="loadScheduledPosts()">
+              <option [ngValue]="null">Select Campaign</option>
+              <option *ngFor="let campaign of campaigns" [ngValue]="campaign.id">{{ campaign.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Platform</label>
+            <select [(ngModel)]="scheduleRequest.platform" name="schedulePlatform">
+              <option value="INSTAGRAM">Instagram 📷</option>
+              <option value="FACEBOOK">Facebook 👥</option>
+              <option value="LINKEDIN">LinkedIn 💼</option>
+              <option value="WHATSAPP">WhatsApp 💬</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Caption</label>
+            <textarea rows="4" [(ngModel)]="scheduleRequest.caption" name="caption"
+              placeholder="Enter caption"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Hashtags</label>
+            <input type="text" [(ngModel)]="scheduleRequest.hashtags" name="hashtags" placeholder="#example #hashtags">
+          </div>
+          <div class="form-group">
+            <label>Image URL</label>
+            <div style="display: flex; gap: 8px">
+              <input type="text" [(ngModel)]="scheduleRequest.imageUrl" name="imageUrl" placeholder="https://..."
+                style="flex: 1">
+              <button type="button" class="btn btn-secondary" style="font-size: 12px;"
+                (click)="activeTab = 'content'">Pick generated</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Schedule Date & Time</label>
+            <input type="datetime-local" [(ngModel)]="scheduleRequest.scheduledTime" name="scheduledTime">
+          </div>
+          <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 10px;" (click)="schedulePost()"
+            [disabled]="loading || !scheduleRequest.campaignId">
+            {{ loading ? '⏳ Scheduling...' : '📅 Schedule Post' }}
+          </button>
+        </form>
       </div>
 
       <!-- AI Insights -->
       <div class="ai-card">
         <h3>💡 AI Insights</h3>
         <div class="insights-list" *ngIf="aiInsights">
-          <div class="insight-item">📊 Best Performing: {{ aiInsights.bestContentType }}</div>
-          <div class="insight-item">⏰ Best Time: {{ aiInsights.bestPostingTime }}</div>
-          <div class="insight-item">💡 Suggested: {{ aiInsights.suggestedCampaigns?.join(', ') }}</div>
-          <div class="insight-item">🔥 Trending: {{ aiInsights.trendingTopics?.join(' ') }}</div>
+          <div class="insight-item" style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 8px;">
+            📊 <strong>Best Performing:</strong> {{ aiInsights.bestContentType }}
+          </div>
+          <div class="insight-item" style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 8px;">
+            ⏰ <strong>Best Time:</strong> {{ aiInsights.bestPostingTime }}
+          </div>
+          <div class="insight-item" style="padding: 10px; background: #f5f7fa; border-radius: 8px; margin-bottom: 8px;">
+            💡 <strong>Suggested:</strong> {{ aiInsights.suggestedCampaigns?.join(', ') }}
+          </div>
+          <div class="insight-item" style="padding: 10px; background: #f5f7fa; border-radius: 8px;">
+            🔥 <strong>Trending Topics:</strong> {{ aiInsights.trendingTopics?.join(' ') }}
+          </div>
         </div>
-<<<<<<< HEAD
         <button class="btn btn-secondary" style="margin-top: 20px; width: 100%;" (click)="loadAIInsights()">🔄 Refresh
           Insights</button>
-=======
-        <button class="action-btn">🔄 Refresh Insights</button>
->>>>>>> ddf7a41105bd73a8b47b15a2744f2d421b3f4882
       </div>
     </div>
 
@@ -623,29 +543,28 @@
     </div>
 
   </main>
-</div>
-
-<!-- Create Campaign Modal -->
-<div class="modal" *ngIf="showCreateCampaign" (click)="showCreateCampaign = false">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <h2>Create New Campaign</h2>
-    <form (ngSubmit)="createCampaign()">
-      <div class="form-group">
-        <label>Campaign Name</label>
-        <input type="text" [(ngModel)]="newCampaign.name" name="name" required>
-      </div>
-      <div class="form-group">
-        <label>Start Date</label>
-        <input type="date" [(ngModel)]="newCampaign.startDate" name="startDate" required>
-      </div>
-      <div class="form-group">
-        <label>End Date</label>
-        <input type="date" [(ngModel)]="newCampaign.endDate" name="endDate" required>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="btn btn-secondary" (click)="showCreateCampaign = false">Cancel</button>
-        <button type="submit" class="btn btn-primary">Create Campaign</button>
-      </div>
-    </form>
+  <!-- Create Campaign Modal -->
+  <div class="modal" *ngIf="showCreateCampaign" (click)="showCreateCampaign = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Create New Campaign</h2>
+      <form (ngSubmit)="createCampaign()">
+        <div class="form-group">
+          <label>Campaign Name</label>
+          <input type="text" [(ngModel)]="newCampaign.name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" [(ngModel)]="newCampaign.startDate" name="startDate" required>
+        </div>
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" [(ngModel)]="newCampaign.endDate" name="endDate" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" (click)="showCreateCampaign = false">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Campaign</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

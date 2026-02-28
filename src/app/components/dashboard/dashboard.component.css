@@ -694,12 +694,11 @@
     display: none;
   }
 
-<<<<<<< HEAD
   .main-content {
     padding: 24px;
   }
 }
-=======
+
 .action-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -740,4 +739,3 @@
   outline: none;
   border-color: #2563eb;
 }
->>>>>>> ddf7a41105bd73a8b47b15a2744f2d421b3f4882

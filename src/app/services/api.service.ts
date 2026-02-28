@@ -39,11 +39,7 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
-<<<<<<< HEAD
   private baseUrl = 'http://localhost:8087/api';
-=======
-  private baseUrl = 'http://192.168.0.102:8081/api';
->>>>>>> ddf7a41105bd73a8b47b15a2744f2d421b3f4882
 
   constructor(private http: HttpClient) { }
 
