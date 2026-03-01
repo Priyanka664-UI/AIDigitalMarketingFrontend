@@ -1,0 +1,262 @@
+<div class="strategy-container">
+  <!-- Landing Page - Show when form is closed -->
+  <div *ngIf="!showForm" class="landing-page">
+    <div class="strategy-header">
+      <h1>🚀 AI Marketing Strategist</h1>
+      <p>Generate comprehensive 30-day marketing strategies powered by AI</p>
+      <button class="btn-create" (click)="openForm()">
+        ✨ Generate New Strategy
+      </button>
+    </div>
+
+    <!-- Previously Generated Strategies -->
+    <div *ngIf="savedStrategies.length > 0" class="saved-strategies">
+      <h2>📋 Your Marketing Strategies</h2>
+      <div class="strategies-grid">
+        <div *ngFor="let saved of savedStrategies" class="strategy-card">
+          <div class="card-header">
+            <h3>{{ saved.businessName }}</h3>
+            <span class="date">{{ saved.createdAt | date:'short' }}</span>
+          </div>
+          <div class="card-body">
+            <p><strong>Category:</strong> {{ saved.category }}</p>
+            <p><strong>Goal:</strong> {{ saved.goal }}</p>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" (click)="viewStrategy(saved)">
+              👁️ View
+            </button>
+            <button class="btn btn-primary" (click)="strategyData = saved.data; downloadStrategy()">
+              📄 Download PDF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="savedStrategies.length === 0" class="empty-state">
+      <div class="empty-icon">📊</div>
+      <h3>No strategies yet</h3>
+      <p>Create your first 30-day marketing strategy to get started</p>
+    </div>
+  </div>
+
+  <!-- Form View - Show when creating new strategy -->
+  <div *ngIf="showForm" class="form-view">
+    <button class="btn-back" (click)="closeForm()">← Back to Strategies</button>
+    
+    <!-- Show form only if no strategy generated yet -->
+    <div *ngIf="!strategy">
+      <div class="strategy-header">
+        <h1>🚀 AI Marketing Strategist</h1>
+        <p>Get your personalized 30-day marketing plan in seconds</p>
+      </div>
+
+  <div class="strategy-form">
+    <div class="form-group">
+      <label>Business Name *</label>
+      <input type="text" [(ngModel)]="request.businessName" placeholder="e.g., TechStartup Inc." class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Business Category *</label>
+      <input type="text" [(ngModel)]="request.businessCategory" placeholder="e.g., E-commerce, SaaS, Restaurant" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Target Audience *</label>
+      <input type="text" [(ngModel)]="request.targetAudience" placeholder="e.g., Young professionals aged 25-35" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Primary Goal *</label>
+      <select [(ngModel)]="request.primaryGoal" class="form-control">
+        <option *ngFor="let goal of goals" [value]="goal">{{ goal }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Budget Level *</label>
+      <div class="budget-options">
+        <button *ngFor="let level of budgetLevels" 
+                (click)="request.budgetLevel = level"
+                [class.active]="request.budgetLevel === level"
+                class="budget-btn">
+          {{ level }}
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Select Platforms * (Choose at least one)</label>
+      <div class="platform-grid">
+        <button *ngFor="let platform of availablePlatforms"
+                (click)="togglePlatform(platform)"
+                [class.selected]="isPlatformSelected(platform)"
+                class="platform-btn">
+          {{ platform }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+
+    <button (click)="generateStrategy()" 
+            [disabled]="loading" 
+            class="generate-btn">
+      <span *ngIf="!loading">✨ Generate My 30-Day Strategy</span>
+      <span *ngIf="loading">🔄 Generating...</span>
+    </button>
+    
+    <!-- Debug info -->
+    <div *ngIf="strategy" style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 4px; font-size: 12px;">
+      ✅ Strategy received! Length: {{ strategy.length }} characters
+    </div>
+  </div>
+
+  <div *ngIf="strategy" class="strategy-result">
+    <h2>📋 Your Personalized Marketing Strategy</h2>
+    
+    <div *ngIf="strategyData" class="strategy-structured">
+      <!-- Positioning -->
+      <div class="section" *ngIf="strategyData.positioning">
+        <h3>💎 Brand Positioning</h3>
+        <div class="card">
+          <p><strong>UVP:</strong> {{ strategyData.positioning.uvp }}</p>
+          <p><strong>Messaging:</strong> {{ strategyData.positioning.messaging }}</p>
+          <p><strong>Voice:</strong> {{ strategyData.positioning.voice }}</p>
+        </div>
+      </div>
+
+      <!-- Weekly Plan -->
+      <div class="section" *ngIf="strategyData.weeks">
+        <h3>📅 4-Week Plan</h3>
+        <div *ngFor="let week of strategyData.weeks" class="week-card">
+          <h4>Week {{ week.week }}: {{ week.title }}</h4>
+          <p *ngIf="week.setup"><strong>Setup:</strong> {{ week.setup }}</p>
+          <p *ngIf="week.funnelSetup"><strong>Funnel:</strong> {{ week.funnelSetup }}</p>
+          <p *ngIf="week.paidStrategy"><strong>Paid Strategy:</strong> {{ week.paidStrategy }}</p>
+          <p *ngIf="week.storytelling"><strong>Storytelling:</strong> {{ week.storytelling }}</p>
+          <p *ngIf="week.leadMagnet"><strong>Lead Magnet:</strong> {{ week.leadMagnet }}</p>
+          <p *ngIf="week.conversionCampaign"><strong>Conversion:</strong> {{ week.conversionCampaign }}</p>
+          <p *ngIf="week.amplification"><strong>Amplification:</strong> {{ week.amplification }}</p>
+        </div>
+      </div>
+
+      <!-- Content Ideas -->
+      <div class="section" *ngIf="strategyData.contentPlan">
+        <h3>✍️ Content Ideas</h3>
+        <div *ngFor="let weekPlan of strategyData.contentPlan" class="content-week">
+          <h4>Week {{ weekPlan.week }}</h4>
+          <div *ngFor="let idea of weekPlan.ideas" class="content-card">
+            <h5>{{ idea.title }}</h5>
+            <p>{{ idea.caption }}</p>
+            <p class="cta"><strong>CTA:</strong> {{ idea.cta }}</p>
+            <div class="hashtags">
+              <span *ngFor="let tag of idea.hashtags" class="hashtag">#{{ tag }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="section" *ngIf="strategyData.kpis">
+        <h3>📊 KPIs to Track</h3>
+        <div class="card">
+          <div *ngFor="let metric of strategyData.kpis.metrics">
+            <p><strong>{{ metric.platform }}:</strong> {{ metric.metrics.join(', ') }}</p>
+          </div>
+          <p *ngIf="strategyData.kpis.conversionExpectations"><strong>Conversion Expectations:</strong> {{ strategyData.kpis.conversionExpectations }}</p>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="section" *ngIf="strategyData.tools">
+        <h3>🛠️ Recommended Tools</h3>
+        <div class="tools-grid">
+          <div *ngIf="strategyData.tools.scheduling" class="tool-category">
+            <h4>Scheduling</h4>
+            <p *ngFor="let tool of strategyData.tools.scheduling">{{ tool.name }} - {{ tool.reason }}</p>
+          </div>
+          <div *ngIf="strategyData.tools.analytics" class="tool-category">
+            <h4>Analytics</h4>
+            <p *ngFor="let tool of strategyData.tools.analytics">{{ tool.name }} - {{ tool.reason }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fallback: Show raw JSON if structured data not available -->
+    <div *ngIf="!strategyData" class="strategy-content">
+      <pre style="white-space: pre-wrap; font-family: inherit; line-height: 1.8;">{{ strategy }}</pre>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; gap: 12px;">
+      <button class="btn btn-secondary" (click)="copyStrategy()">
+        📋 Copy to Clipboard
+      </button>
+      <button class="btn btn-primary" (click)="downloadStrategy()">
+        📄 Download as PDF
+      </button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- View Strategy Modal -->
+<div *ngIf="showViewModal" class="modal-overlay" (click)="closeViewModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>📋 Marketing Strategy</h2>
+      <button class="modal-close" (click)="closeViewModal()">✕</button>
+    </div>
+    
+    <div class="modal-body">
+      <div *ngIf="viewingStrategy">
+        <!-- Positioning -->
+        <div class="section" *ngIf="viewingStrategy.positioning">
+          <h3>💎 Brand Positioning</h3>
+          <p><strong>UVP:</strong> {{ viewingStrategy.positioning.uvp }}</p>
+          <p><strong>Messaging:</strong> {{ viewingStrategy.positioning.messaging }}</p>
+          <p><strong>Voice:</strong> {{ viewingStrategy.positioning.voice }}</p>
+        </div>
+
+        <!-- Weekly Plan -->
+        <div class="section" *ngIf="viewingStrategy.weeks">
+          <h3>📅 4-Week Plan</h3>
+          <div *ngFor="let week of viewingStrategy.weeks" style="margin-bottom: 20px;">
+            <h4>Week {{ week.week }}: {{ week.title }}</h4>
+            <p *ngIf="week.setup"><strong>Setup:</strong> {{ week.setup }}</p>
+            <p *ngIf="week.funnelSetup"><strong>Funnel:</strong> {{ week.funnelSetup }}</p>
+            <p *ngIf="week.paidStrategy"><strong>Paid Strategy:</strong> {{ week.paidStrategy }}</p>
+            <p *ngIf="week.storytelling"><strong>Storytelling:</strong> {{ week.storytelling }}</p>
+            <p *ngIf="week.leadMagnet"><strong>Lead Magnet:</strong> {{ week.leadMagnet }}</p>
+          </div>
+        </div>
+
+        <!-- Content Ideas -->
+        <div class="section" *ngIf="viewingStrategy.contentPlan">
+          <h3>✍️ Content Ideas</h3>
+          <div *ngFor="let weekPlan of viewingStrategy.contentPlan">
+            <h4>Week {{ weekPlan.week }}</h4>
+            <div *ngFor="let idea of weekPlan.ideas.slice(0, 3)" style="margin-bottom: 15px;">
+              <h5>{{ idea.title }}</h5>
+              <p>{{ idea.caption }}</p>
+              <p class="cta"><strong>CTA:</strong> {{ idea.cta }}</p>
+              <div class="hashtags">
+                <span *ngFor="let tag of idea.hashtags" class="hashtag">#{{ tag }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeViewModal()">Close</button>
+      <button class="btn btn-primary" (click)="strategyData = viewingStrategy; downloadStrategy()">
+        📄 Download PDF
+      </button>
+    </div>
+  </div>
+</div>

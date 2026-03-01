@@ -4,15 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ApiService, Business, Campaign, Post } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { CalendarComponent } from '../calendar/calendar.component';
 import { SettingsComponent } from '../settings/settings.component';
+import { MarketingStrategyComponent } from '../marketing-strategy/marketing-strategy.component';
 import { ContentManagementService } from '../../services/content-management.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, CalendarComponent, SettingsComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SettingsComponent, MarketingStrategyComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -530,5 +530,9 @@ export class DashboardComponent implements OnInit {
 
   getPostsByPlatform(platform: string): Post[] {
     return this.posts.filter(p => p.platform === platform);
+  }
+
+  navigateToStrategy() {
+    this.activeTab = 'strategy';
   }
 }
