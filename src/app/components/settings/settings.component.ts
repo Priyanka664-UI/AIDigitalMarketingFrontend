@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { SocialMediaService } from '../../services/social-media.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-settings',
@@ -67,7 +68,8 @@ export class SettingsComponent implements OnInit {
   constructor(
     private router: Router, 
     private apiService: ApiService,
-    private socialService: SocialMediaService
+    private socialService: SocialMediaService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -185,18 +187,18 @@ export class SettingsComponent implements OnInit {
   connectPlatform(platform: string) {
     const businessId = localStorage.getItem('businessId');
     if (!businessId) {
-      alert('Please set up your business first!');
+      this.toastService.error('Please set up your business first!');
       return;
     }
     
     this.socialService.connectPlatform(+businessId, platform.toUpperCase()).subscribe({
       next: () => {
-        alert(`✅ ${platform} connected successfully!\n\nNote: Due to Meta API production approval time, we simulated the OAuth response for this hackathon demo.`);
+        this.toastService.success(`${platform} connected successfully!`);
         this.loadConnections();
       },
       error: (err: any) => {
         console.error('Error:', err);
-        alert(`Failed to connect ${platform}`);
+        this.toastService.error(`Failed to connect ${platform}`);
       }
     });
   }
@@ -207,7 +209,7 @@ export class SettingsComponent implements OnInit {
     
     this.socialService.disconnectPlatform(+businessId, platform.toUpperCase()).subscribe({
       next: () => {
-        alert(`${platform} disconnected`);
+        this.toastService.success(`${platform} disconnected`);
         this.loadConnections();
       },
       error: (err: any) => console.error('Error:', err)
