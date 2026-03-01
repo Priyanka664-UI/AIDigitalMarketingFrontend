@@ -43,6 +43,12 @@
         </div>
         Analytics
       </button>
+      <button class="nav-item" [class.active]="activeTab === 'strategy'" (click)="activeTab = 'strategy'">
+        <div class="icon-container">
+          <iconify-icon icon="lucide:lightbulb" style="font-size: 18px"></iconify-icon>
+        </div>
+        Marketing Strategy
+      </button>
       <button class="nav-item" [class.active]="activeTab === 'settings'" (click)="activeTab = 'settings'" (mouseenter)="showSettingsMenu = true" (mouseleave)="onSettingsLeave()">
         <div class="icon-container">
           <iconify-icon icon="lucide:settings" style="font-size: 18px"></iconify-icon>
@@ -578,6 +584,11 @@
     <!-- Settings -->
     <div *ngIf="activeTab === 'settings'">
       <app-settings [initialTab]="settingsTab"></app-settings>
+    </div>
+
+    <!-- Marketing Strategy -->
+    <div *ngIf="activeTab === 'strategy'">
+      <app-marketing-strategy></app-marketing-strategy>
     </div>
 
   </main>
