@@ -270,6 +270,42 @@
 
     <!-- Content Generator / AI View -->
     <div *ngIf="activeTab === 'content'" class="ai-sections">
+      <!-- AI Image Generator Card -->
+      <div class="ai-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h3 style="color: white;">🎨 AI Image Generator</h3>
+        <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px;">Generate professional marketing images with AI</p>
+        <form class="ai-form">
+          <div class="form-group">
+            <label style="color: white;">Image Prompt</label>
+            <textarea 
+              [(ngModel)]="imagePrompt" 
+              name="imagePrompt"
+              placeholder="Describe your marketing image... (e.g., Modern coffee shop with customers)"
+              rows="3"
+              style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);"
+            ></textarea>
+          </div>
+          <button 
+            type="button" 
+            class="btn btn-primary" 
+            style="width: 100%; background: white; color: #667eea; font-weight: 600;"
+            (click)="generateAIImage()" 
+            [disabled]="isGeneratingImage || !imagePrompt.trim()">
+            {{ isGeneratingImage ? '⏳ Generating Image...' : '✨ Generate Image' }}
+          </button>
+        </form>
+
+        <div *ngIf="generatedImage" style="margin-top: 24px; background: white; padding: 20px; border-radius: 12px;">
+          <h4 style="color: #333; margin-bottom: 12px;">Generated Image:</h4>
+          <img [src]="generatedImage" alt="Generated" style="width: 100%; border-radius: 8px; margin-bottom: 12px;" />
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-secondary" (click)="downloadImage()" style="flex: 1;">⬇️ Download</button>
+            <button class="btn btn-secondary" (click)="copyImageUrl()" style="flex: 1;">📋 Copy URL</button>
+            <button class="btn btn-secondary" (click)="saveToLibrary()" style="flex: 1;">💾 Save</button>
+          </div>
+        </div>
+      </div>
+
       <!-- AI Content Form -->
       <div class="ai-card">
         <h3>🧠 AI Content Generator</h3>

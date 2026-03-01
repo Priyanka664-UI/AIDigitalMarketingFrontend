@@ -4,6 +4,46 @@
     <p>Manage your content library and drafts</p>
   </div>
 
+  <!-- AI Image Generator Card -->
+  <div class="image-generator-card">
+    <div class="card-header">
+      <h2>🎨 AI Image Generator</h2>
+      <p>Generate professional marketing images with AI</p>
+    </div>
+    
+    <div class="card-body">
+      <div class="input-group">
+        <label>Image Prompt</label>
+        <textarea 
+          [(ngModel)]="imagePrompt" 
+          placeholder="Describe your marketing image... (e.g., Modern coffee shop with customers)"
+          rows="3"
+        ></textarea>
+      </div>
+      
+      <button 
+        class="btn-generate" 
+        (click)="generateImage()" 
+        [disabled]="isGenerating || !imagePrompt.trim()"
+      >
+        {{ isGenerating ? '⏳ Generating...' : '✨ Generate Image' }}
+      </button>
+      
+      <div *ngIf="generatedImage" class="generated-result">
+        <h3>Generated Image:</h3>
+        <img [src]="generatedImage" alt="Generated" />
+        <div class="image-actions">
+          <a [href]="generatedImage" download="ai-generated-image.jpg" class="btn-download">
+            ⬇️ Download
+          </a>
+          <button class="btn-use" (click)="useGeneratedImage()">
+            ✓ Use in Post
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="empty-state">
     <h2>Content Library Coming Soon</h2>
     <p>Use the AI Engine tab to generate and schedule content</p>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentManagementService } from '../../services/content-management.service';
 import { ApiService } from '../../services/api.service';
+import { AiImageService } from '../../services/ai-image.service';
 
 @Component({
   selector: 'app-content-management',
@@ -13,6 +14,11 @@ import { ApiService } from '../../services/api.service';
 })
 export class ContentManagementComponent implements OnInit {
   activeTab = 'ai-generator';
+  
+  // Image Generation
+  imagePrompt = '';
+  generatedImage = '';
+  isGenerating = false;
   
   contentRequest = {
     productName: '',
@@ -47,11 +53,34 @@ export class ContentManagementComponent implements OnInit {
 
   constructor(
     private contentService: ContentManagementService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private aiImageService: AiImageService
   ) {}
 
   ngOnInit() {
     this.loadCampaigns();
+  }
+
+  generateImage() {
+    if (!this.imagePrompt.trim()) return;
+
+    this.isGenerating = true;
+    this.aiImageService.generateImage(this.imagePrompt).subscribe({
+      next: (res) => {
+        this.generatedImage = res.imageUrl;
+        this.isGenerating = false;
+      },
+      error: (err) => {
+        console.error('Image generation failed:', err);
+        alert('Image generation failed. Please try again.');
+        this.isGenerating = false;
+      }
+    });
+  }
+
+  useGeneratedImage() {
+    this.scheduleRequest.imageUrl = this.generatedImage;
+    alert('Image added to post! Go to scheduler to complete your post.');
   }
 
   loadCampaigns() {
