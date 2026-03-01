@@ -54,8 +54,7 @@ export class RegistrationComponent {
       password: this.formData.password
     }).subscribe({
       next: (response) => {
-        this.authService.saveAuthData(response);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.errors = [err.error?.message || 'Registration failed'];

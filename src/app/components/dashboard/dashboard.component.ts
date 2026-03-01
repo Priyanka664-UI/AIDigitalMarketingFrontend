@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   showSettingsMenu: boolean = false;
   settingsTab: string = 'account';
   private hideMenuTimeout: any;
+  showLogoutConfirm = false;
   
   selectedPlatform: string = 'all';
   platformPosts: { [key: string]: Post[] } = {};
@@ -206,8 +207,13 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
+    this.showLogoutConfirm = false;
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  confirmLogout() {
+    this.showLogoutConfirm = true;
   }
 
   onSettingsLeave() {
@@ -502,6 +508,24 @@ export class DashboardComponent implements OnInit {
     this.selectedPlatform = platform;
     this.loadPlatformPosts(platform);
     this.showAllPostsModal = true;
+  }
+
+  deleteCampaign(campaignId: number) {
+    if (confirm('Delete this campaign and all its posts?')) {
+      this.apiService.deleteCampaign(campaignId).subscribe({
+        next: () => {
+          this.campaigns = this.campaigns.filter(c => c.id !== campaignId);
+          this.toastService.success('Campaign deleted successfully!');
+          if (this.selectedCampaign?.id === campaignId) {
+            this.selectedCampaign = this.campaigns.length > 0 ? this.campaigns[0] : null;
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastService.error('Failed to delete campaign');
+        }
+      });
+    }
   }
 
   getPostsByPlatform(platform: string): Post[] {

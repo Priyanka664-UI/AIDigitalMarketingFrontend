@@ -892,3 +892,43 @@
   color: #1e40af;
   border-left: 4px solid #3b82f6;
 }
+
+/* Campaign Manager Styles */
+.campaign-card {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.campaign-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.campaign-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.campaign-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--foreground);
+}
+
+.campaign-dates {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.campaign-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

@@ -200,4 +200,8 @@ export class ApiService {
   getPostsByPlatform(platform: string, businessId: number): Observable<Post[]> {
     return this.http.get<Post[]>(`${this.baseUrl}/calendar/posts/platform/${platform}?businessId=${businessId}`);
   }
+
+  deleteCampaign(campaignId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/campaigns/${campaignId}`);
+  }
 }
