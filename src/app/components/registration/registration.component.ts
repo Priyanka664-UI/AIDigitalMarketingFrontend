@@ -47,6 +47,7 @@ export class RegistrationComponent {
 
     this.authService.signup({
       businessName: validation.normalized_data.business_name,
+      ownerName: this.formData.owner_name,
       category: validation.normalized_data.category,
       targetAudience: validation.normalized_data.target_audience,
       brandTone: validation.normalized_data.brand_tone,
@@ -54,6 +55,8 @@ export class RegistrationComponent {
       password: this.formData.password
     }).subscribe({
       next: (response) => {
+        this.loading = false;
+        alert('Registration successful! Please login to continue.');
         this.router.navigate(['/login']);
       },
       error: (err) => {

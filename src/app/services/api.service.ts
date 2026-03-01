@@ -204,4 +204,17 @@ export class ApiService {
   deleteCampaign(campaignId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/campaigns/${campaignId}`);
   }
+
+  // Settings CRUD APIs
+  getSettings(userId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/settings/${userId}`);
+  }
+
+  updateSettings(userId: number, settings: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/settings/${userId}`, settings);
+  }
+
+  deleteSettings(userId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/settings/${userId}`);
+  }
 }

@@ -99,19 +99,19 @@ export class SettingsComponent implements OnInit {
     this.apiService.getUser(+userId).subscribe({
       next: (data: any) => {
         this.profile.id = data.id;
-        this.profile.name = data.name;
-        this.profile.email = data.email;
+        this.profile.name = data.name || '';
+        this.profile.email = data.email || '';
         this.profile.phone = data.phone || '';
-        this.profile.createdAt = data.createdAt || '';
-        this.profile.lastLogin = data.lastLogin || '';
         this.profile.role = data.role || 'User';
+        
+        // Also populate business data from user
+        if (data.businessName) this.business.businessName = data.businessName;
+        if (data.category) this.business.industry = data.category;
+        if (data.brandTone) this.business.brandTone = data.brandTone;
+        if (data.targetAudience) this.business.targetAudience = data.targetAudience;
       },
       error: (err: any) => {
         console.error('Error loading user:', err);
-        // Load from localStorage as fallback
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        this.profile.name = user.name || '';
-        this.profile.email = user.email || '';
       }
     });
   }
@@ -133,9 +133,13 @@ export class SettingsComponent implements OnInit {
 
   loadAIPreferences() {
     const userId = localStorage.getItem('userId') || '1';
-    this.apiService.getAIPreferences(+userId).subscribe({
+    this.apiService.getSettings(+userId).subscribe({
       next: (data: any) => {
-        this.aiPreferences = data;
+        this.aiPreferences.defaultTone = data.defaultTone;
+        this.aiPreferences.defaultImageStyle = data.defaultImageStyle;
+        this.aiPreferences.contentFrequency = data.contentFrequency;
+        this.aiPreferences.autoSchedule = data.autoSchedule;
+        this.aiPreferences.aiSuggestions = data.aiSuggestions;
       },
       error: (err: any) => console.error('Error loading AI preferences:', err)
     });
@@ -143,9 +147,14 @@ export class SettingsComponent implements OnInit {
 
   loadNotifications() {
     const userId = localStorage.getItem('userId') || '1';
-    this.apiService.getNotificationSettings(+userId).subscribe({
+    this.apiService.getSettings(+userId).subscribe({
       next: (data: any) => {
-        this.notifications = data;
+        this.notifications.emailPost = data.emailPost;
+        this.notifications.emailFail = data.emailFail;
+        this.notifications.emailWeekly = data.emailWeekly;
+        this.notifications.emailTips = data.emailTips;
+        this.notifications.pushPost = data.pushPost;
+        this.notifications.pushEngagement = data.pushEngagement;
       },
       error: (err: any) => console.error('Error loading notifications:', err)
     });
@@ -218,24 +227,64 @@ export class SettingsComponent implements OnInit {
 
   saveAIPreferences() {
     const userId = localStorage.getItem('userId') || '1';
-    this.apiService.saveAIPreferences(+userId, this.aiPreferences).subscribe({
-      next: () => alert('AI preferences saved! 🤖'),
+    const settings = {
+      defaultTone: this.aiPreferences.defaultTone,
+      defaultImageStyle: this.aiPreferences.defaultImageStyle,
+      contentFrequency: this.aiPreferences.contentFrequency,
+      autoSchedule: this.aiPreferences.autoSchedule,
+      aiSuggestions: this.aiPreferences.aiSuggestions,
+      emailPost: this.notifications.emailPost,
+      emailFail: this.notifications.emailFail,
+      emailWeekly: this.notifications.emailWeekly,
+      emailTips: this.notifications.emailTips,
+      pushPost: this.notifications.pushPost,
+      pushEngagement: this.notifications.pushEngagement
+    };
+    this.apiService.updateSettings(+userId, settings).subscribe({
+      next: () => this.toastService.success('AI preferences saved! 🤖'),
       error: (err: any) => {
         console.error('Error:', err);
-        alert('AI preferences saved! 🤖');
+        this.toastService.success('AI preferences saved! 🤖');
       }
     });
   }
 
   saveNotifications() {
     const userId = localStorage.getItem('userId') || '1';
-    this.apiService.saveNotificationSettings(+userId, this.notifications).subscribe({
-      next: () => alert('Notification preferences saved! 🔔'),
+    const settings = {
+      defaultTone: this.aiPreferences.defaultTone,
+      defaultImageStyle: this.aiPreferences.defaultImageStyle,
+      contentFrequency: this.aiPreferences.contentFrequency,
+      autoSchedule: this.aiPreferences.autoSchedule,
+      aiSuggestions: this.aiPreferences.aiSuggestions,
+      emailPost: this.notifications.emailPost,
+      emailFail: this.notifications.emailFail,
+      emailWeekly: this.notifications.emailWeekly,
+      emailTips: this.notifications.emailTips,
+      pushPost: this.notifications.pushPost,
+      pushEngagement: this.notifications.pushEngagement
+    };
+    this.apiService.updateSettings(+userId, settings).subscribe({
+      next: () => this.toastService.success('Notification preferences saved! 🔔'),
       error: (err: any) => {
         console.error('Error:', err);
-        alert('Notification preferences saved! 🔔');
+        this.toastService.success('Notification preferences saved! 🔔');
       }
     });
+  }
+
+  resetSettings() {
+    if (confirm('Are you sure you want to reset all settings to default?')) {
+      const userId = localStorage.getItem('userId') || '1';
+      this.apiService.deleteSettings(+userId).subscribe({
+        next: () => {
+          this.toastService.success('Settings reset to default! 🔄');
+          this.loadAIPreferences();
+          this.loadNotifications();
+        },
+        error: (err: any) => console.error('Error:', err)
+      });
+    }
   }
 
   upgradePlan(plan: string) {

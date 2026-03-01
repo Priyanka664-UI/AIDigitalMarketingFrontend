@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 
 export interface SignupRequest {
   businessName: string;
+  ownerName?: string;
   category: string;
   targetAudience: string;
   brandTone: string;
@@ -47,9 +48,15 @@ export class AuthService {
   }
 
   saveAuthData(response: AuthResponse): void {
-    if (response.token) localStorage.setItem('authToken', response.token);
-    if (response.userId) localStorage.setItem('userId', response.userId.toString());
-    if (response.businessId) localStorage.setItem('businessId', response.businessId.toString());
+    if (response.token) {
+      localStorage.setItem('authToken', response.token);
+    }
+    if (response.userId) {
+      localStorage.setItem('userId', response.userId.toString());
+    }
+    if (response.businessId) {
+      localStorage.setItem('businessId', response.businessId.toString());
+    }
   }
 
   getAuthToken(): string | null {
@@ -57,6 +64,16 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getAuthToken();
+    const token = this.getAuthToken();
+    const userId = localStorage.getItem('userId');
+    return !!(token && userId);
+  }
+
+  getUserId(): string | null {
+    return localStorage.getItem('userId');
+  }
+
+  getBusinessId(): string | null {
+    return localStorage.getItem('businessId');
   }
 }

@@ -127,7 +127,10 @@
 
       <!-- AI Preferences -->
       <div *ngIf="activeTab === 'ai'" class="settings-section">
-        <h2>🤖 AI Preferences</h2>
+        <div class="section-header">
+          <h2>🤖 AI Preferences</h2>
+          <button class="btn-secondary" (click)="resetSettings()">🔄 Reset to Default</button>
+        </div>
         <p class="section-description">Customize AI content generation</p>
 
         <div class="form-group">
